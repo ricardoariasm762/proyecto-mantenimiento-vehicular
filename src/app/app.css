@@ -438,3 +438,17 @@
   color: var(--color-primary);
 }
 
+/* 4. CENTRAL CAD CHASSIS DIAGNOSTIC MAP */
+.cad-chassis-section {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .cad-chassis-section {
+    padding: 20px;
+  }
+}
+
