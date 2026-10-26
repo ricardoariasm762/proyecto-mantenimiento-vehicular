@@ -608,6 +608,112 @@
 
       </section>
 
+      <!-- ==================== 5. QUANTITATIVE TELEMETRY SLIDERS ==================== -->
+      <section class="cad-panel sliders-section">
+        
+        <div class="sliders-header">
+          <div class="sliders-title-group">
+            <span class="material-symbols-outlined icon-cyan">tune</span>
+            <h2 class="font-headline-sm sliders-title">QUANTITATIVE ODOMETER &amp; KINEMATIC THRESHOLDS</h2>
           </div>
+          <span class="font-label-sm sliders-sub">HIGH-PRECISION SENSOR FEED // CONTINUOUS CALIBRATION</span>
+        </div>
+
+        <div class="sliders-grid">
+          
+          <!-- Slider 1: Total Mileage -->
+          <div class="cad-panel-inset slider-card">
+            <div class="slider-top font-label-sm">
+              <span class="slider-sub">TOTAL FLEET MILEAGE</span>
+              <span class="slider-status-cyan">STATUS: LOGGED</span>
+            </div>
+            <div class="slider-val-row">
+              <span class="font-headline-lg val-num">{{ mileageKm() | number }}</span>
+              <span class="font-label-lg val-unit">KM</span>
+            </div>
+            <div class="slider-bar-wrap">
+              <div class="cad-track">
+                <div class="cad-fill fill-cyan" [style.width.%]="mileagePercent()"></div>
+              </div>
+              <input 
+                type="range" 
+                min="0" 
+                max="200000" 
+                step="500"
+                class="hidden-range-slider"
+                [ngModel]="mileageKm()" 
+                (ngModelChange)="mileageKm.set($event)"/>
+              <div class="slider-ticks font-label-sm">
+                <span>0 KM</span>
+                <span>50,000 KM</span>
+                <span>100,000+ KM</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slider 2: Delta KM Since Last Service -->
+          <div class="cad-panel-inset slider-card">
+            <div class="slider-top font-label-sm">
+              <span class="slider-sub">DELTA SINCE LAST SERVICE</span>
+              <span class="slider-status-orange">LIMIT: 10,000 KM</span>
+            </div>
+            <div class="slider-val-row">
+              <span class="font-headline-lg val-num text-orange">{{ kmSinceLastService() | number }}</span>
+              <span class="font-label-lg val-unit">KM</span>
+              <span class="font-label-sm service-used-badge">{{ servicePercent() }}% USED</span>
+            </div>
+            <div class="slider-bar-wrap">
+              <div class="cad-track">
+                <div class="cad-fill fill-gradient-orange" [style.width.%]="servicePercent()"></div>
+              </div>
+              <input 
+                type="range" 
+                min="0" 
+                max="25000" 
+                step="250"
+                class="hidden-range-slider"
+                [ngModel]="kmSinceLastService()" 
+                (ngModelChange)="kmSinceLastService.set($event)"/>
+              <div class="slider-ticks font-label-sm">
+                <span>SERVICE INTERVAL</span>
+                <span class="text-orange">{{ 10000 - kmSinceLastService() > 0 ? (10000 - kmSinceLastService()) + ' KM REMAINING' : 'SERVICE OVERDUE' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slider 3: Fuel Consumption Delta -->
+          <div class="cad-panel-inset slider-card">
+            <div class="slider-top font-label-sm">
+              <span class="slider-sub">FUEL CONSUMPTION DELTA</span>
+              <span class="slider-status-orange">PARASITIC DRAG</span>
+            </div>
+            <div class="slider-val-row">
+              <span class="font-headline-lg val-num text-secondary">{{ fuelDeltaDisplay() }}</span>
+              <span class="font-label-sm val-unit-sub">VS BASELINE ({{ fuelConsumptionRatio() | number:'1.2-2' }}x)</span>
+            </div>
+            <div class="slider-bar-wrap">
+              <div class="cad-track relative">
+                <div class="center-notch-line"></div>
+                <div class="cad-fill fill-orange" [style.width.%]="(fuelConsumptionRatio() - 0.85) / (2.20 - 0.85) * 100"></div>
+              </div>
+              <input 
+                type="range" 
+                min="0.85" 
+                max="2.20" 
+                step="0.05"
+                class="hidden-range-slider"
+                [ngModel]="fuelConsumptionRatio()" 
+                (ngModelChange)="fuelConsumptionRatio.set($event)"/>
+              <div class="slider-ticks font-label-sm">
+                <span>NOMINAL [1.00]</span>
+                <span class="text-orange">SLIP INDUCED LOSS</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+              </section>
+    </div>
   </main>
 </div>
