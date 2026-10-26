@@ -763,3 +763,37 @@
   color: var(--color-outline);
 }
 
+/* NLP Feed */
+.nlp-transcription-box {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nlp-header-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nlp-header-line .label {
+  color: var(--color-on-surface-variant);
+}
+
+.nlp-header-line .confidence-val {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.cad-symptom-textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-on-surface);
+  font-style: italic;
+  line-height: 1.5;
+  resize: vertical;
+}
+

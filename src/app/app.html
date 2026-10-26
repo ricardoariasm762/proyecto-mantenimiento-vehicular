@@ -488,6 +488,21 @@
             </div>
           </div>
 
+          <!-- Live NLP Transcription Feed -->
+          <div class="cad-panel-inset nlp-transcription-box">
+            <div class="nlp-header-line font-label-sm">
+              <span class="label">LIVE NLP TRANSCRIPTION FEED:</span>
+              <span class="confidence-val">CONFIDENCE: 96.4%</span>
+            </div>
+            <textarea 
+              rows="3" 
+              class="cad-symptom-textarea font-body-md"
+              [ngModel]="rawSymptomText()"
+              (ngModelChange)="rawSymptomText.set($event)"
+              placeholder="Escribe o dicta el síntoma acústico o mecánico percibido en el vehículo...">
+            </textarea>
+          </div>
+
                   </div>
       </section>
     </div>
