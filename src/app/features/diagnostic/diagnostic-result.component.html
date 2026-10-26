@@ -1,0 +1,233 @@
+<div class="result-container">
+  @if (!result()) {
+    <!-- Estado Vacío Inicial -->
+    <div class="empty-state glass-panel">
+      <div class="empty-icon-glow">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 8v4"/>
+          <path d="M12 16h.01"/>
+        </svg>
+      </div>
+      <h3 class="empty-title">Panel de Diagnóstico en Espera</h3>
+      <p class="empty-desc">
+        Completa el formulario de la izquierda o dicta tu síntoma mediante voz con el botón de micrófono para que la red neuronal ONNX y el motor NLP calculen el diagnóstico predictivo.
+      </p>
+      <div class="features-badge-row">
+        <span class="badge-tag">⚡ Spring AI NLP</span>
+        <span class="badge-tag">🧠 Random Forest ONNX</span>
+        <span class="badge-tag">🎙️ Web Speech API</span>
+        <span class="badge-tag">🐘 PostgreSQL</span>
+      </div>
+    </div>
+  } @else {
+    <!-- Tarjeta Principal de Diagnóstico -->
+    <div class="glass-panel main-result-card">
+      <!-- Encabezado del Resultado -->
+      <div class="result-header">
+        <div class="header-left">
+          <span class="plate-tag">{{ result()?.licensePlate }}</span>
+          <div>
+            <h2 class="fault-title">{{ result()?.primaryFault }}</h2>
+            <span class="sub-label">Diagnóstico generado por modelo multiclase ONNX</span>
+          </div>
+        </div>
+        
+        <!-- Semáforo de Nivel de Riesgo -->
+        <div class="risk-badge" [ngClass]="getRiskBadgeClass(result()?.riskLevel)">
+          <span class="risk-beacon"></span>
+          <span class="risk-text">RIESGO {{ result()?.riskLevel }}</span>
+        </div>
+      </div>
+
+      <!-- Métricas Clave Grid -->
+      <div class="metrics-grid">
+        <!-- Medidor Circular de Certeza Predictiva -->
+        <div class="metric-card confidence-gauge-card">
+          <span class="metric-title">Certeza Predictiva</span>
+          <div class="gauge-wrapper">
+            <svg class="circular-chart" viewBox="0 0 120 120">
+              <!-- Fondo del círculo -->
+              <circle
+                class="circle-bg"
+                cx="60"
+                cy="60"
+                r="52"
+              />
+              <!-- Círculo de progreso animado -->
+              <circle
+                class="circle-progress"
+                cx="60"
+                cy="60"
+                r="52"
+                [style.strokeDashoffset]="circleDashOffset()"
+              />
+            </svg>
+            <div class="gauge-center-text">
+              <span class="gauge-value">{{ result()?.confidencePercentage | number:'1.1-1' }}%</span>
+              <span class="gauge-label">Confianza</span>
+            </div>
+          </div>
+          <p class="metric-footnote">
+            Probabilidad acumulada del clasificador
+          </p>
+        </div>
+
+        <!-- Indicador Visual del Subsistema Afectado -->
+        <div class="metric-card subsystem-card">
+          <span class="metric-title">Subsistema Mecánico Afectado</span>
+          
+          <div class="subsystem-body">
+            @let meta = getSubsystemMeta(result()?.primaryFault);
+            <div class="subsystem-icon-wrapper" [style.color]="meta.color" [style.borderColor]="meta.color">
+              @if (meta.icon === 'gear') {
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+              } @else if (meta.icon === 'brake') {
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <circle cx="12" cy="12" r="4"/>
+                  <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/>
+                  <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/>
+                  <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/>
+                  <line x1="4.93" y1="19.07" x2="9.17" y2="14.83"/>
+                </svg>
+              } @else if (meta.icon === 'suspension') {
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2v4"/>
+                  <path d="M12 18v4"/>
+                  <path d="M8 6h8"/>
+                  <path d="M6 10h12"/>
+                  <path d="M8 14h8"/>
+                  <path d="M6 18h12"/>
+                </svg>
+              } @else if (meta.icon === 'engine') {
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="4" y="8" width="16" height="10" rx="2"/>
+                  <path d="M8 4v4"/>
+                  <path d="M16 4v4"/>
+                  <path d="M2 13h2"/>
+                  <path d="M20 13h2"/>
+                  <path d="M8 18v2"/>
+                  <path d="M16 18v2"/>
+                </svg>
+              } @else if (meta.icon === 'battery') {
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="7" width="16" height="12" rx="2"/>
+                  <line x1="6" y1="11" x2="6" y2="15"/>
+                  <line x1="12" y1="11" x2="12" y2="15"/>
+                  <line x1="10" y1="13" x2="14" y2="13"/>
+                  <path d="M22 11v4"/>
+                </svg>
+              } @else {
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <polyline points="9 12 11 14 15 10"/>
+                </svg>
+              }
+            </div>
+
+            <div class="subsystem-info">
+              <span class="subsystem-name">{{ meta.label }}</span>
+              <span class="subsystem-badge" [style.backgroundColor]="meta.color + '22'" [style.color]="meta.color">
+                {{ meta.badge }}
+              </span>
+            </div>
+          </div>
+          <p class="metric-footnote">Componente inferido por NLP + Clasificador</p>
+        </div>
+      </div>
+
+      <!-- Tarjeta de Prescripción Preventiva -->
+      <div class="prescription-card">
+        <div class="prescription-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          <h4 class="prescription-title">Acción Técnica Preventiva Recomendada</h4>
+        </div>
+        <p class="prescription-body">
+          {{ result()?.recommendedAction }}
+        </p>
+      </div>
+
+      <!-- Descargo de Responsabilidad Legal -->
+      <div class="disclaimer-bar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        <span>{{ result()?.disclaimer }}</span>
+      </div>
+    </div>
+  }
+
+  <!-- Historial de Diagnósticos Previos -->
+  <div class="glass-panel history-card">
+    <div class="history-header">
+      <div class="history-title-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 14 14"/>
+        </svg>
+        <h3 class="history-title">Historial de Bitácora Vehicular (PostgreSQL)</h3>
+      </div>
+      <button type="button" class="refresh-history-btn" (click)="onRefreshHistory()" [disabled]="isLoadingHistory()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" [class.spinning]="isLoadingHistory()">
+          <path d="M23 4v6h-6"/>
+          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+        </svg>
+        <span>Actualizar</span>
+      </button>
+    </div>
+
+    @if (isLoadingHistory()) {
+      <div class="history-loading">
+        <div class="spinner-small"></div>
+        <span>Cargando bitácora de diagnósticos...</span>
+      </div>
+    } @else if (historyList().length === 0) {
+      <div class="history-empty">
+        <p>No hay diagnósticos previos registrados para este vehículo.</p>
+      </div>
+    } @else {
+      <div class="table-responsive">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Placa</th>
+              <th>Falla Clasificada</th>
+              <th>Subsistema</th>
+              <th>Certeza</th>
+              <th>Kilometraje</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of historyList(); track item.id || item.createdAt) {
+              <tr>
+                <td class="cell-date">{{ item.createdAt | date:'short' }}</td>
+                <td class="cell-plate"><strong>{{ item.licensePlate }}</strong></td>
+                <td class="cell-fault">{{ item.predictedFault }}</td>
+                <td>
+                  <span class="history-subsystem-tag">{{ item.detectedSystem }}</span>
+                </td>
+                <td class="cell-confidence">
+                  <span class="confidence-pill">{{ item.confidencePercentage | number:'1.1-1' }}%</span>
+                </td>
+                <td class="cell-mileage">{{ item.mileageKm | number }} km</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>
