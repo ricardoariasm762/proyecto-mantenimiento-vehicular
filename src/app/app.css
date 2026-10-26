@@ -233,3 +233,44 @@
   font-size: 9px;
 }
 
+/* Operator Badge */
+.operator-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-surface-container-low);
+  border: 1px solid var(--border-cad);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.operator-meta {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  line-height: 1.15;
+}
+
+.op-name {
+  color: var(--color-on-surface);
+  font-weight: 600;
+}
+
+.op-role {
+  color: var(--color-secondary);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.operator-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--color-surface-container-high);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-cad);
+}
+
