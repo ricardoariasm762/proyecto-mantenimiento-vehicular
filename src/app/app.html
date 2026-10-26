@@ -381,7 +381,46 @@
               <text x="488" y="164" font-family="JetBrains Mono" font-size="8" fill="var(--color-on-surface-variant)">DTC P0741 // TORQUE CONV LOCKUP</text>
             </g>
 
-                      </svg>
+            <!-- 2. ENGINE CORE HOTSPOT (CYAN) -->
+            <g class="cad-hotspot-group" (click)="selectHotspot('engine')" style="cursor: pointer;">
+              <circle cx="305" cy="250" r="6" fill="var(--color-primary)" filter="url(#cadCyanGlow)"/>
+              <polyline points="305,210 305,170 230,170" fill="none" stroke="var(--color-primary)" stroke-width="1"/>
+              <rect x="75" y="148" width="150" height="42" rx="3" fill="var(--color-surface-container-lowest)" stroke="var(--color-primary)" stroke-opacity="0.5" stroke-width="1"/>
+              <text x="83" y="163" font-family="JetBrains Mono" font-size="9" font-weight="700" fill="var(--color-primary)">ENGINE CORE // TWIN TURBO</text>
+              <text x="83" y="176" font-family="JetBrains Mono" font-size="8.5" fill="var(--color-on-surface)">BOOST: 1.42 bar | AFR: 14.7</text>
+              <text x="83" y="185" font-family="JetBrains Mono" font-size="7.5" fill="var(--color-on-surface-variant)">OIL P: 4.8 BAR [OPTIMAL]</text>
+            </g>
+
+            <!-- 3. BRAKING ASSEMBLY HOTSPOT (CYAN) -->
+            <g class="cad-hotspot-group" (click)="selectHotspot('brakes')" style="cursor: pointer;">
+              <circle cx="265" cy="100" r="5" fill="var(--color-primary)"/>
+              <polyline points="265,80 265,58 335,58" fill="none" stroke="var(--color-primary)" stroke-width="1"/>
+              <rect x="340" y="44" width="145" height="32" rx="3" fill="var(--color-surface-container-lowest)" stroke="var(--color-primary)" stroke-opacity="0.4" stroke-width="1"/>
+              <text x="347" y="58" font-family="JetBrains Mono" font-size="8.5" font-weight="700" fill="var(--color-primary)">BRAKING ASSEMBLY [FL]</text>
+              <text x="347" y="70" font-family="JetBrains Mono" font-size="8" fill="var(--color-on-surface)">PADS: 78% | ROTOR: 42°C</text>
+            </g>
+
+            <!-- 4. SUSPENSION ARMS (CYAN) -->
+            <g class="cad-hotspot-group" (click)="selectHotspot('suspension')" style="cursor: pointer;">
+              <circle cx="280" cy="360" r="5" fill="var(--color-primary)"/>
+              <polyline points="280,360 280,410 340,410" fill="none" stroke="var(--color-primary)" stroke-width="1"/>
+              <rect x="345" y="396" width="155" height="32" rx="3" fill="var(--color-surface-container-lowest)" stroke="var(--color-primary)" stroke-opacity="0.4" stroke-width="1"/>
+              <text x="352" y="410" font-family="JetBrains Mono" font-size="8.5" font-weight="700" fill="var(--color-primary)">ACTIVE DAMPING ARM</text>
+              <text x="352" y="422" font-family="JetBrains Mono" font-size="8" fill="var(--color-on-surface)">FREQ: 14Hz | INTEGRITY: 91%</text>
+            </g>
+
+            <!-- 5. ELECTRICAL HARNESS & CAN BUS (CYAN) -->
+            <g class="cad-hotspot-group" (click)="selectHotspot('electrical')" style="cursor: pointer;">
+              <circle cx="650" cy="160" r="5" fill="var(--color-primary)"/>
+              <polyline points="650,160 690,160 710,195" fill="none" stroke="var(--color-primary)" stroke-width="1"/>
+              <rect x="715" y="180" width="160" height="34" rx="3" fill="var(--color-surface-container-lowest)" stroke="var(--color-primary)" stroke-opacity="0.4" stroke-width="1"/>
+              <text x="722" y="194" font-family="JetBrains Mono" font-size="8.5" font-weight="700" fill="var(--color-primary)">CAN-BUS 2.0 HARNESS</text>
+              <text x="722" y="207" font-family="JetBrains Mono" font-size="8" fill="var(--color-on-surface)">LOAD: 44% | 14.2V [NO FAULTS]</text>
+            </g>
+
+          </svg>
+
+                    </svg>
         </div>
       </section>
     </div>
