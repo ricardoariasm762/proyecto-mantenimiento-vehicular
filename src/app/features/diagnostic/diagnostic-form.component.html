@@ -1,0 +1,240 @@
+<div class="form-card glass-panel">
+  <!-- Card Header -->
+  <div class="card-header">
+    <div class="header-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11 2 11.5 2 12v4c0 .6.4 1 1 1h2"/>
+        <circle cx="7" cy="17" r="2"/>
+        <path d="M9 17h6"/>
+        <circle cx="17" cy="17" r="2"/>
+      </svg>
+    </div>
+    <div>
+      <h2 class="card-title">Telemetría y Síntomas</h2>
+      <p class="card-subtitle">Ingresa los parámetros mecánicos o dicta los síntomas con voz</p>
+    </div>
+  </div>
+
+  <!-- Presets Rápidos -->
+  <div class="presets-container">
+    <span class="presets-label">Casos de prueba rápidos:</span>
+    <div class="preset-chips">
+      <button type="button" class="chip" (click)="loadPreset('transmision')">
+        <span class="chip-dot trans"></span> Transmisión
+      </button>
+      <button type="button" class="chip" (click)="loadPreset('frenos')">
+        <span class="chip-dot brake"></span> Frenos
+      </button>
+      <button type="button" class="chip" (click)="loadPreset('suspension')">
+        <span class="chip-dot susp"></span> Suspensión
+      </button>
+      <button type="button" class="chip" (click)="loadPreset('motor')">
+        <span class="chip-dot engine"></span> Motor
+      </button>
+      <button type="button" class="chip" (click)="loadPreset('electrico')">
+        <span class="chip-dot elec"></span> Eléctrico
+      </button>
+      <button type="button" class="chip" (click)="loadPreset('normal')">
+        <span class="chip-dot ok"></span> Normal
+      </button>
+    </div>
+  </div>
+
+  <!-- Formulario -->
+  <form (ngSubmit)="onSubmit()" class="form-grid">
+    <!-- Fila 1: Placa y Odómetro -->
+    <div class="input-group">
+      <label for="licensePlate" class="input-label">
+        <span>Placa del Vehículo</span>
+        <span class="required-star">*</span>
+      </label>
+      <div class="input-wrapper">
+        <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="5" width="20" height="14" rx="2"/>
+          <line x1="2" y1="10" x2="22" y2="10"/>
+        </svg>
+        <input
+          id="licensePlate"
+          type="text"
+          placeholder="Ej: ABC-123"
+          [ngModel]="licensePlate()"
+          (ngModelChange)="licensePlate.set($event)"
+          name="licensePlate"
+          class="custom-input uppercase"
+          maxlength="10"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="mileageKm" class="input-label">
+        <span>Kilometraje Total (km)</span>
+        <span class="required-star">*</span>
+      </label>
+      <div class="input-wrapper">
+        <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <input
+          id="mileageKm"
+          type="number"
+          placeholder="Ej: 120000"
+          [ngModel]="mileageKm()"
+          (ngModelChange)="mileageKm.set($event)"
+          name="mileageKm"
+          class="custom-input"
+          min="0"
+          step="500"
+          required
+        />
+      </div>
+    </div>
+
+    <!-- Fila 2: Km desde servicio y Consumo de combustible -->
+    <div class="input-group">
+      <label for="kmSinceLastService" class="input-label">
+        <span>Km desde Último Servicio</span>
+        <span class="required-star">*</span>
+      </label>
+      <div class="input-wrapper">
+        <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </svg>
+        <input
+          id="kmSinceLastService"
+          type="number"
+          placeholder="Ej: 14000"
+          [ngModel]="kmSinceLastService()"
+          (ngModelChange)="kmSinceLastService.set($event)"
+          name="kmSinceLastService"
+          class="custom-input"
+          min="0"
+          step="200"
+          required
+        />
+      </div>
+      <div class="service-indicator" [class.danger]="kmSinceLastService() > 15000">
+        {{ kmSinceLastService() > 15000 ? '⚠️ Alerta: Servicio atrasado (>15,000 km)' : '✓ Intervalo dentro del margen estándar' }}
+      </div>
+    </div>
+
+    <div class="input-group">
+      <div class="slider-header">
+        <label for="fuelConsumptionRatio" class="input-label">
+          <span>Ratio de Consumo Combustible</span>
+        </label>
+        <span class="ratio-badge" [class.alert]="fuelConsumptionRatio() > 1.25">
+          {{ fuelConsumptionRatio() | number:'1.2-2' }}x 
+          <small>({{ fuelConsumptionRatio() <= 1.1 ? 'Normal' : fuelConsumptionRatio() <= 1.25 ? 'Elevado' : 'Crítico' }})</small>
+        </span>
+      </div>
+      <div class="slider-container">
+        <input
+          id="fuelConsumptionRatio"
+          type="range"
+          min="0.85"
+          max="2.20"
+          step="0.05"
+          [ngModel]="fuelConsumptionRatio()"
+          (ngModelChange)="fuelConsumptionRatio.set($event)"
+          name="fuelConsumptionRatio"
+          class="custom-range"
+        />
+        <div class="slider-ticks">
+          <span>0.85 (Óptimo)</span>
+          <span>1.0 (Estándar)</span>
+          <span>1.25 (Alerta)</span>
+          <span>2.20 (Fuga/Falla)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fila 3: Entrada de Síntomas con Reconocimiento de Voz -->
+    <div class="input-group full-width">
+      <div class="symptom-label-bar">
+        <label for="rawSymptomText" class="input-label">
+          <span>Descripción de Síntomas del Conductor</span>
+          <span class="required-star">*</span>
+        </label>
+        
+        <!-- Estado de Grabación en vivo -->
+        @if (voiceService.isListening()) {
+          <div class="live-recording-indicator">
+            <span class="rec-dot"></span>
+            <span class="rec-text">Escuchando voz en tiempo real...</span>
+            <div class="audio-waves">
+              <span class="wave w1"></span>
+              <span class="wave w2"></span>
+              <span class="wave w3"></span>
+              <span class="wave w4"></span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="textarea-voice-box" [class.listening-active]="voiceService.isListening()">
+        <textarea
+          id="rawSymptomText"
+          rows="3"
+          placeholder="Escribe el síntoma o presiona el botón de micrófono para dictarlo por voz (ej: 'El carro empezó a vibrar en la palanca cuando acelero')..."
+          [ngModel]="rawSymptomText()"
+          (ngModelChange)="rawSymptomText.set($event)"
+          name="rawSymptomText"
+          class="custom-textarea"
+          required
+        ></textarea>
+
+        <!-- Botón de Micrófono Integrado -->
+        <div class="voice-action-overlay">
+          <button
+            type="button"
+            class="mic-btn"
+            [class.active-mic]="voiceService.isListening()"
+            (click)="toggleVoiceRecognition()"
+            [title]="voiceService.isListening() ? 'Detener dictado de voz' : 'Iniciar dictado por voz'"
+          >
+            @if (voiceService.isListening()) {
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="6" y="6" width="12" height="12" rx="2"/>
+              </svg>
+            } @else {
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            }
+          </button>
+        </div>
+      </div>
+
+      @if (voiceService.errorMessage()) {
+        <div class="voice-error-toast">
+          {{ voiceService.errorMessage() }}
+        </div>
+      }
+    </div>
+
+    <!-- Botón Principal -->
+    <div class="form-actions full-width">
+      <button
+        type="submit"
+        class="submit-button"
+        [disabled]="isSubmitting()"
+      >
+        @if (isSubmitting()) {
+          <div class="spinner"></div>
+          <span>Procesando NLP & Inferencia ONNX...</span>
+        } @else {
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          <span>Calcular Diagnóstico Predictivo</span>
+        }
+      </button>
+    </div>
+  </form>
+</div>
