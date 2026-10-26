@@ -1527,3 +1527,46 @@
   font-weight: 700;
 }
 
+/* 9. FOOTER */
+.cad-footer {
+  width: 100%;
+  background-color: var(--color-surface-container-lowest);
+  border-top: 1px solid var(--border-cad);
+  padding: 10px 24px;
+  position: relative;
+  z-index: 10;
+}
+
+.cad-footer-inner {
+  max-width: 1720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--color-on-surface-variant);
+}
+
+@media (min-width: 768px) {
+  .cad-footer-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.footer-left, .footer-right {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pipe {
+  color: var(--border-cad);
+}
+
+.reticle-symbol {
+  color: var(--color-primary);
+  font-size: 18px;
+  line-height: 1;
+}
