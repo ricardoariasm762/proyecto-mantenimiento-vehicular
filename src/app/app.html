@@ -713,7 +713,46 @@
 
         </div>
 
-              </section>
-    </div>
+        <!-- Vehicle Plate & Main Actuator Bar -->
+        <div class="actuator-bar">
+          <div class="plate-input-cluster">
+            <label for="plateInput" class="font-label-sm plate-label">CHASSIS / VEHICLE LICENSE PLATE:</label>
+            <div class="plate-input-wrap">
+              <span class="material-symbols-outlined input-icon">pin</span>
+              <input 
+                id="plateInput"
+                type="text" 
+                class="cad-plate-input font-label-lg uppercase" 
+                maxlength="10"
+                [ngModel]="licensePlate()"
+                (ngModelChange)="licensePlate.set($event)"
+                placeholder="TRX-720"/>
+            </div>
+          </div>
+
+          <button 
+            type="button" 
+            class="cad-actuator-btn"
+            [disabled]="isSubmitting()"
+            (click)="onDiagnosticSubmit()">
+            @if (isSubmitting()) {
+              <div class="spinner"></div>
+              <span>PROCESANDO INFERENCIA ONNX &amp; NLP...</span>
+            } @else {
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="8"/>
+                <line x1="12" y1="2" x2="12" y2="6"/>
+                <line x1="12" y1="18" x2="12" y2="22"/>
+                <line x1="2" y1="12" x2="6" y2="12"/>
+                <line x1="18" y1="12" x2="22" y2="12"/>
+              </svg>
+              <span>CALCULAR DIAGNÓSTICO PREDICTIVO</span>
+            }
+          </button>
+        </div>
+
+      </section>
+
+          </div>
   </main>
 </div>
