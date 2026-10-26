@@ -66,6 +66,37 @@
       <!-- Right Telemetry & Controls Cluster -->
       <div class="header-right-cluster">
 
+        <!-- Theme Mode Switcher (Sistema / Oscuro / Claro) -->
+        <div class="theme-switcher-pill" title="Selector de Tema (Detecta modo del sistema)">
+          <button 
+            type="button" 
+            class="theme-btn" 
+            [class.active]="themeService.themePreference() === 'system'"
+            (click)="themeService.setTheme('system')"
+            title="Modo Automático del Sistema (Detecta SO)">
+            <span class="material-symbols-outlined theme-icon">desktop_windows</span>
+            <span class="theme-label">Auto</span>
+          </button>
+          <button 
+            type="button" 
+            class="theme-btn" 
+            [class.active]="themeService.themePreference() === 'dark'"
+            (click)="themeService.setTheme('dark')"
+            title="Modo Oscuro (Titanio / Blueprint CAD)">
+            <span class="material-symbols-outlined theme-icon">dark_mode</span>
+            <span class="theme-label">Dark</span>
+          </button>
+          <button 
+            type="button" 
+            class="theme-btn" 
+            [class.active]="themeService.themePreference() === 'light'"
+            (click)="themeService.setTheme('light')"
+            title="Modo Claro (High Contrast Blueprint)">
+            <span class="material-symbols-outlined theme-icon">light_mode</span>
+            <span class="theme-label">Light</span>
+          </button>
+        </div>
+
               </div>
     </div>
   </header>

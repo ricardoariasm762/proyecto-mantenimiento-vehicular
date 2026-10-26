@@ -136,3 +136,45 @@
   flex-shrink: 0;
 }
 
+/* Theme Switcher Pill (System Aware) */
+.theme-switcher-pill {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-surface-container-low);
+  border: 1px solid var(--border-cad);
+  border-radius: 6px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.theme-btn {
+  border: none;
+  background: transparent;
+  color: var(--color-on-surface-variant);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  transition: all 0.2s ease;
+}
+
+.theme-btn:hover {
+  color: var(--color-on-surface);
+  background-color: var(--color-surface-container-high);
+}
+
+.theme-btn.active {
+  background-color: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+  box-shadow: 0 0 8px rgba(0, 180, 216, 0.3);
+  font-weight: 600;
+}
+
+.theme-icon {
+  font-size: 15px;
+}
+
