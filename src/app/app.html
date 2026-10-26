@@ -808,7 +808,79 @@
           </div>
         </div>
 
-              </section>
+        <!-- Prescriptive Action Checklist (7 Cols) -->
+        <div class="cad-panel protocol-card">
+          <div>
+            <div class="protocol-header">
+              <span class="font-headline-sm protocol-title">
+                <span class="material-symbols-outlined icon-orange">task_alt</span>
+                PRESCRIPTIVE ACTION PROTOCOL
+              </span>
+              <span class="font-label-sm req-tag">3 ACTIONS REQUIRED</span>
+            </div>
+
+            <!-- Structured Action Items List -->
+            <div class="action-items-list">
+              
+              <!-- Item 1: Critical -->
+              <div class="action-item-card critical-action">
+                <div class="action-info">
+                  <div class="action-badge-row font-label-sm">
+                    <span class="action-pill pill-critical">CRITICAL</span>
+                    <span class="action-priority">PRIORITY 1</span>
+                  </div>
+                  <h3 class="font-body-md action-text">
+                    {{ currentResult()?.recommendedAction || 'Schedule torque converter inspection & fluid flush within 400 km' }}
+                  </h3>
+                  <span class="font-label-sm action-sub">Prevents complete transmission lockup friction failure</span>
+                </div>
+                <button type="button" class="cad-btn-action" (click)="handlePrescriptiveAction('schedule')">
+                  <span class="material-symbols-outlined">calendar_add_on</span>
+                  SCHEDULE SERVICE
+                </button>
+              </div>
+
+              <!-- Item 2: Secondary -->
+              <div class="action-item-card secondary-action">
+                <div class="action-info">
+                  <div class="action-badge-row font-label-sm">
+                    <span class="action-pill pill-secondary">SECONDARY</span>
+                    <span class="action-priority">COOLING CIRCUIT</span>
+                  </div>
+                  <h3 class="font-body-md action-text">
+                    Inspect transmission cooler line flow rate and filter seal
+                  </h3>
+                  <span class="font-label-sm action-sub">Recommended part: OE Filter Kit #TR-80-FK2</span>
+                </div>
+                <button type="button" class="cad-btn-secondary" (click)="handlePrescriptiveAction('order')">
+                  <span class="material-symbols-outlined">inventory_2</span>
+                  MARK ORDERED
+                </button>
+              </div>
+
+              <!-- Item 3: Preventive -->
+              <div class="action-item-card preventive-action">
+                <div class="action-info">
+                  <div class="action-badge-row font-label-sm">
+                    <span class="action-pill pill-preventive">PREVENTIVE</span>
+                    <span class="action-priority">OBD-II CAN CALIBRATION</span>
+                  </div>
+                  <h3 class="font-body-md action-text">
+                    Re-calibrate TCU shift-map adaptation parameters via OBD-II
+                  </h3>
+                  <span class="font-label-sm action-sub">Clears accumulated slip adaptation trim tables</span>
+                </div>
+                <button type="button" class="cad-btn-secondary" (click)="handlePrescriptiveAction('selfTest')">
+                  <span class="material-symbols-outlined">play_circle</span>
+                  RUN SELF-TEST
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+                  </div>
+      </section>
     </div>
   </main>
 </div>
