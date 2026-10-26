@@ -434,6 +434,62 @@
 
       </section>
 
+      <!-- ==================== 4. MULTIMODAL ACOUSTIC & NLP CAPSULE ==================== -->
+      <section class="cad-grid-dual">
+        
+        <!-- Voice Capsule & Reactive Oscilloscope (7 Cols) -->
+        <div class="cad-panel voice-capsule-card">
+          <div class="capsule-header">
+            <div class="capsule-title-group">
+              <span class="material-symbols-outlined icon-cyan">graphic_eq</span>
+              <h2 class="font-headline-sm capsule-title">MULTIMODAL ACOUSTIC SYMPTOM INGESTION</h2>
+            </div>
+            @if (voiceService.isListening()) {
+              <div class="listening-live-tag">
+                <span class="pulse-red-dot"></span>
+                <span>LISTENING TO ENGINE NOISE DESCRIPTION...</span>
+              </div>
+            } @else {
+              <div class="ready-tag">
+                <span class="dot-cyan"></span>
+                <span>WEB SPEECH API ACTIVE (es-CO)</span>
+              </div>
+            }
           </div>
+
+          <!-- Dynamic Reactive Oscilloscope Capsule -->
+          <div class="oscilloscope-capsule">
+            <button 
+              type="button" 
+              class="mic-circle-btn" 
+              [class.active-recording]="voiceService.isListening()"
+              (click)="toggleVoiceRecognition()"
+              [title]="voiceService.isListening() ? 'Detener captura de voz' : 'Iniciar captura de audio por voz'">
+              <span class="material-symbols-outlined">
+                {{ voiceService.isListening() ? 'stop' : 'mic' }}
+              </span>
+            </button>
+
+            <!-- Animated Spectrum LED Bars -->
+            <div class="spectrum-bars-track">
+              @for (barHeight of spectrumBars(); track $index) {
+                <div 
+                  class="spectrum-bar" 
+                  [class.bar-secondary]="$index >= 4 && $index <= 6 || $index >= 10 && $index <= 12 || $index === 16"
+                  [style.height.px]="barHeight">
+                </div>
+              }
+            </div>
+
+            <!-- Audio Spec Readout -->
+            <div class="audio-spec-meta">
+              <span class="font-label-sm audio-freq">48.0 kHz</span>
+              <span class="font-label-sm audio-bits">24-BIT PCM</span>
+            </div>
+          </div>
+
+                  </div>
+      </section>
+    </div>
   </main>
 </div>
