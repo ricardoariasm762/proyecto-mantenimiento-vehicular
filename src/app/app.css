@@ -797,3 +797,124 @@
   resize: vertical;
 }
 
+/* Presets Row */
+.cad-presets-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.preset-tag-label {
+  color: var(--color-outline);
+}
+
+.preset-chips-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.preset-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--color-surface-container);
+  border: 1px solid var(--border-cad);
+  color: var(--color-on-surface);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.preset-chip:hover {
+  background-color: var(--color-surface-container-high);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.chip-dot.trans { background-color: var(--color-secondary); }
+.chip-dot.brake { background-color: var(--color-tertiary); }
+.chip-dot.susp { background-color: var(--color-primary); }
+.chip-dot.engine { background-color: var(--color-secondary-container); }
+.chip-dot.elec { background-color: #ffd166; }
+.chip-dot.ok { background-color: #06d6a0; }
+
+.capsule-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* NLP Meta Card Right */
+.nlp-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.nlp-title {
+  color: var(--color-on-surface);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lex-engine-tag {
+  color: var(--color-outline);
+}
+
+.semantic-badges-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 640px) {
+  .semantic-badges-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.semantic-badge-box {
+  background-color: var(--color-surface-container);
+  border: 1px solid var(--border-cad);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.badge-sub {
+  color: var(--color-on-surface-variant);
+}
+
+.badge-val {
+  font-weight: 700;
+}
+
+.text-secondary { color: var(--color-secondary); }
+.text-orange { color: var(--color-secondary-container); }
+.text-cyan { color: var(--color-primary); }
+.text-secondary-dim { color: var(--color-secondary); opacity: 0.85; }
+
+.mini-dot.orange {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-secondary-container);
+  margin-right: 4px;
+}
+

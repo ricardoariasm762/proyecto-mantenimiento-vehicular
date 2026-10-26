@@ -528,6 +528,64 @@
             </div>
           </div>
 
+          <!-- Quick Mic Action Buttons -->
+          <div class="capsule-actions-row">
+            <button type="button" class="cad-btn-primary" (click)="toggleVoiceRecognition()">
+              <span class="material-symbols-outlined">refresh</span>
+              {{ voiceService.isListening() ? 'STOP RECORDING' : 'RECORD VOICE SYMPTOM' }}
+            </button>
+            <button type="button" class="cad-btn-secondary" (click)="showNotification('Archivo de audio .WAV cargado para espectrograma.')">
+              <span class="material-symbols-outlined">upload_file</span>
+              UPLOAD TELEMETRY .WAV
+            </button>
+            <button type="button" class="cad-btn-secondary" (click)="showNotification('Entidad semántica validada por motor NLP.')">
+              <span class="material-symbols-outlined">check_circle</span>
+              VALIDATE NLP ENTITY
+            </button>
+          </div>
+
+        </div>
+
+        <!-- NLP Entity Extraction & Correlated OBD (5 Cols) -->
+        <div class="cad-panel nlp-meta-card">
+          <div>
+            <div class="nlp-card-header">
+              <span class="font-headline-sm nlp-title">
+                <span class="material-symbols-outlined icon-orange">bubble_chart</span>
+                NLP EXTRACTED METADATA
+              </span>
+              <span class="font-label-sm lex-engine-tag">LEXICAL ENGINE v3.1</span>
+            </div>
+
+            <!-- Structured Semantic Badges Grid -->
+            <div class="semantic-badges-grid">
+              
+              <div class="semantic-badge-box">
+                <span class="font-label-sm badge-sub">IDENTIFIED SUBSYSTEM</span>
+                <span class="font-label-md badge-val text-secondary">{{ currentSubsystem() }}</span>
+              </div>
+
+              <div class="semantic-badge-box">
+                <span class="font-label-sm badge-sub">SEVERITY LEVEL</span>
+                <span class="font-label-md badge-val text-orange">
+                  <span class="mini-dot orange"></span>
+                  {{ currentResult()?.riskLevel || 'MODERATE 2/3 (ACTION)' }}
+                </span>
+              </div>
+
+              <div class="semantic-badge-box">
+                <span class="font-label-sm badge-sub">ACOUSTIC FREQUENCY</span>
+                <span class="font-label-md badge-val text-cyan">140 Hz HARMONIC RATTLE</span>
+              </div>
+
+              <div class="semantic-badge-box">
+                <span class="font-label-sm badge-sub">CAN CORRELATED DTC</span>
+                <span class="font-label-md badge-val text-secondary-dim">{{ currentDtc() }}</span>
+              </div>
+
+            </div>
+          </div>
+
                   </div>
       </section>
     </div>
