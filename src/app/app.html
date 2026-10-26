@@ -1,7 +1,72 @@
 <div class="blueprint-canvas">
-  <div class="cad-main-workspace">
-    <div class="workspace-container">
-      <!-- Veloce CAD Dashboard Root Container -->
+
+  <!-- ==================== 1. FIXED TOP HEADER ==================== -->
+  <header class="cad-header">
+    <div class="cad-header-inner">
+      
+      <!-- Brand & Version -->
+      <div class="brand-cluster">
+        <div class="cad-emblem">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 7 12 12 22 7 12 2" stroke="var(--color-primary)"/>
+            <polyline points="2 17 12 22 22 17" stroke="var(--color-secondary)"/>
+            <polyline points="2 12 12 17 22 12" stroke="var(--color-primary)"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title-line">
+            <span class="font-headline-sm brand-name">VELOCE DIAGNOSTIC OS</span>
+            <span class="font-label-sm brand-ver">v4.8</span>
+          </div>
+          <div class="font-label-sm brand-sub">
+            <span class="sys-prefix">SYS://</span>VEHICLE-TELEMETRY/PREDICTIVE-AI
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Navigation Ribbon -->
+      <nav class="cad-nav">
+        <button 
+          type="button"
+          class="nav-tab" 
+          [class.active]="activeNav() === 'diagnostico-predictivo'"
+          (click)="setNav('diagnostico-predictivo')">
+          DIAGNÓSTICO PREDICTIVO
+        </button>
+        <button 
+          type="button"
+          class="nav-tab" 
+          [class.active]="activeNav() === 'despiece-tecnico-cad'"
+          (click)="setNav('despiece-tecnico-cad')">
+          DESPIECE TÉCNICO CAD
+        </button>
+        <button 
+          type="button"
+          class="nav-tab" 
+          [class.active]="activeNav() === 'flujo-telemetria-can'"
+          (click)="setNav('flujo-telemetria-can')">
+          FLUJO TELEMETRÍA CAN
+        </button>
+        <button 
+          type="button"
+          class="nav-tab" 
+          [class.active]="activeNav() === 'historial-de-fallas-obd-ii'"
+          (click)="setNav('historial-de-fallas-obd-ii')">
+          HISTORIAL DE FALLAS OBD-II
+        </button>
+        <button 
+          type="button"
+          class="nav-tab" 
+          [class.active]="activeNav() === 'configuracion-sensorica'"
+          (click)="setNav('configuracion-sensorica')">
+          CONFIGURACIÓN SENSORICA
+        </button>
+      </nav>
+
+      <!-- Right Telemetry & Controls Cluster -->
+      <div class="header-right-cluster">
+
+              </div>
     </div>
-  </div>
+  </header>
 </div>
