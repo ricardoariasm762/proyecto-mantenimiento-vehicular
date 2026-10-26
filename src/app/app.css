@@ -209,3 +209,27 @@
   letter-spacing: 0.06em;
 }
 
+/* Atomic Real-Time UTC Clock */
+.atomic-clock {
+  display: none;
+  flex-direction: column;
+  text-align: right;
+}
+
+@media (min-width: 860px) {
+  .atomic-clock {
+    display: flex;
+  }
+}
+
+.clock-time {
+  color: var(--color-on-surface);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.clock-sync {
+  color: var(--color-on-surface-variant);
+  font-size: 9px;
+}
+
