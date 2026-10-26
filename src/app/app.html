@@ -892,6 +892,68 @@
 
       </section>
 
+      <!-- ==================== 7. HISTORICAL BITÁCORA TABLE ==================== -->
+      <section class="cad-panel history-section">
+        <div class="history-header-bar">
+          <div class="history-title-group">
+            <span class="material-symbols-outlined icon-cyan">history</span>
+            <h3 class="font-headline-sm history-title">HISTORIAL DE BITÁCORA VEHICULAR (POSTGRESQL / CAN-BUS)</h3>
           </div>
+          <button 
+            type="button" 
+            class="cad-btn-secondary refresh-btn" 
+            (click)="loadHistory(licensePlate())" 
+            [disabled]="isLoadingHistory()">
+            <span class="material-symbols-outlined" [class.spinning]="isLoadingHistory()">sync</span>
+            <span>ACTUALIZAR BITÁCORA</span>
+          </button>
+        </div>
+
+        @if (isLoadingHistory()) {
+          <div class="history-loading-pod">
+            <div class="spinner"></div>
+            <span class="font-label-md">CONSULTANDO BITÁCORA DE BASE DE DATOS...</span>
+          </div>
+        } @else if (historyList().length === 0) {
+          <div class="history-empty-pod">
+            <p class="font-body-md">No se han registrado diagnósticos previos para la placa actual.</p>
+          </div>
+        } @else {
+          <div class="cad-table-wrap">
+            <table class="cad-history-table">
+              <thead>
+                <tr class="font-label-sm">
+                  <th>TIMESTAMP (UTC)</th>
+                  <th>CHASSIS / PLACA</th>
+                  <th>SUBSYSTEM</th>
+                  <th>FALLA CLASIFICADA</th>
+                  <th>CERTEZA AI</th>
+                  <th>ODÓMETRO</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of historyList(); track item.id || item.createdAt) {
+                  <tr class="font-body-md">
+                    <td class="font-label-sm cell-date">{{ item.createdAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                    <td class="font-label-md cell-plate"><strong>{{ item.licensePlate }}</strong></td>
+                    <td>
+                      <span class="cad-subsystem-tag">{{ item.detectedSystem }}</span>
+                    </td>
+                    <td class="cell-fault">{{ item.predictedFault }}</td>
+                    <td>
+                      <span class="cad-confidence-pill">{{ item.confidencePercentage | number:'1.1-1' }}%</span>
+                    </td>
+                    <td class="font-label-sm cell-mileage">{{ item.mileageKm | number }} KM</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
+
+    </div>
+  </main>
+
   </main>
 </div>
