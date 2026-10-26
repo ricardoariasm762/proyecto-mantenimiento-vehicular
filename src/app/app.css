@@ -918,3 +918,44 @@
   margin-right: 4px;
 }
 
+/* Fluid Shear Index */
+.fluid-shear-card {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.shear-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-outline);
+}
+
+.shear-threshold {
+  color: var(--color-secondary);
+  font-weight: 700;
+}
+
+.shear-track {
+  width: 100%;
+  height: 8px;
+  background-color: var(--color-surface-container-high);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.shear-fill {
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary-container));
+  height: 100%;
+  border-radius: 9999px;
+}
+
+.shear-footer {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-on-surface-variant);
+}
+
