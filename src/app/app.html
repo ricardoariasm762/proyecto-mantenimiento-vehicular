@@ -753,6 +753,62 @@
 
       </section>
 
+      <!-- ==================== 6. AI PROGNOSIS & PRESCRIPTIVE PROTOCOL ==================== -->
+      <section class="cad-grid-dual prognosis-section">
+        
+        <!-- Tactile Circular Certainty Dial (5 Cols) -->
+        <div class="cad-panel prognosis-dial-card">
+          <div>
+            <div class="dial-header">
+              <span class="font-headline-sm dial-title">
+                <span class="material-symbols-outlined icon-cyan">smart_toy</span>
+                AI PROGNOSTIC CERTAINTY
+              </span>
+              <span class="font-label-sm asil-tag">ISO-26262 ASIL-B</span>
+            </div>
+
+            <!-- Skeuomorphic Arc Dial -->
+            <div class="dial-visual-cluster">
+              <div class="dial-svg-wrap">
+                <svg class="dial-svg" viewBox="0 0 140 140">
+                  <circle cx="70" cy="70" r="54" fill="none" class="dial-track-circle" stroke-width="12"/>
+                  <circle 
+                    cx="70" cy="70" r="54" fill="none" 
+                    class="dial-progress-circle" 
+                    stroke-width="12"
+                    stroke-dasharray="339.29"
+                    [style.strokeDashoffset]="circleDashOffset()"
+                    stroke-linecap="round"/>
+                </svg>
+                <div class="dial-center-pod">
+                  <span class="font-headline-lg dial-pct">{{ currentResult()?.confidencePercentage | number:'1.0-1' }}%</span>
+                  <span class="font-label-sm dial-label">CONFIDENCE</span>
+                  <span class="font-label-sm dial-algo">ALGO: V4-XGB</span>
+                </div>
+              </div>
+
+              <!-- Root Cause Details -->
+              <div class="root-cause-box">
+                <span class="font-label-sm root-cause-tag">ROOT CAUSE DETERMINATION</span>
+                <p class="font-body-md root-cause-desc">
+                  {{ currentResult()?.primaryFault }}
+                </p>
+                <div class="font-label-sm fleet-match">
+                  <span class="material-symbols-outlined">history</span>
+                  <span>MATCHES 42 HISTORICAL FLEET RECORDS</span>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <!-- Technical Legal Disclaimer -->
+          <div class="cad-panel-inset disclaimer-pod font-label-sm">
+            <span class="material-symbols-outlined icon-disc">info</span>
+            <p>{{ currentResult()?.disclaimer }}</p>
+          </div>
+        </div>
+
+              </section>
+    </div>
   </main>
 </div>
