@@ -201,6 +201,52 @@
         <span class="cad-corner-bl">+ DATUM: AXLE-C</span>
         <span class="cad-corner-br">SCALE 1:25 ISO +</span>
 
+        <!-- CAD Control Ribbon -->
+        <div class="cad-ribbon">
+          <div class="ribbon-left">
+            <span class="cad-view-tag">
+              <span class="material-symbols-outlined tag-icon">view_in_ar</span>
+              ORTHO CAD VIEW 01
+            </span>
+            <span class="font-label-sm calib-tag">
+              CALIBRATED: ±0.02 mm
+            </span>
+          </div>
+
+          <!-- Layer Selectors -->
+          <div class="layer-selector-group">
+            <button 
+              type="button"
+              class="layer-btn" 
+              [class.active]="activeLayer() === 'wireframe'"
+              (click)="selectLayer('wireframe')">
+              WIREFRAME
+            </button>
+            <button 
+              type="button"
+              class="layer-btn" 
+              [class.active]="activeLayer() === 'thermal'"
+              (click)="selectLayer('thermal')">
+              THERMAL SENSORS
+            </button>
+            <button 
+              type="button"
+              class="layer-btn" 
+              [class.active]="activeLayer() === 'kinematics'"
+              (click)="selectLayer('kinematics')">
+              DRIVETRAIN X-RAY
+            </button>
+            <button 
+              type="button"
+              class="grid-toggle-btn" 
+              [class.active]="showGrid()"
+              (click)="toggleGrid()"
+              title="Alternar cuadrícula ortogonal">
+              <span class="material-symbols-outlined">grid_4x4</span>
+            </button>
+          </div>
+        </div>
+
               </section>
     </div>
   </main>
