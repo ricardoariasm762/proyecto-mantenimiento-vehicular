@@ -128,4 +128,47 @@
     </div>
   </header>
 
-  </div>
+  <!-- ==================== MAIN WORKSPACE ==================== -->
+  <main class="cad-main-workspace">
+    <div class="workspace-container">
+
+      <!-- Toast / Notification Bar -->
+      @if (actionNotification()) {
+        <div class="cad-notification-banner">
+          <span class="material-symbols-outlined notif-icon">verified</span>
+          <span class="font-body-md notif-text">{{ actionNotification() }}</span>
+          <button type="button" class="notif-close" (click)="actionNotification.set(null)">✕</button>
+        </div>
+      }
+
+      @if (errorMessage()) {
+        <div class="cad-error-banner">
+          <span class="material-symbols-outlined err-icon">warning</span>
+          <span class="font-body-md err-text">{{ errorMessage() }}</span>
+          <button type="button" class="notif-close" (click)="errorMessage.set(null)">✕</button>
+        </div>
+      }
+
+      <!-- ==================== 2. TOP OPERATIONAL BAR & CHASSIS TELEMETRY ==================== -->
+      <section class="cad-panel operational-header-bar">
+        <div class="accent-top-line"></div>
+        
+        <div class="op-header-left">
+          <div class="op-indicator-bar"></div>
+          <div>
+            <div class="font-label-sm op-platform-tag">
+              <span>PLATFORM ARCHITECTURE [VX-840]</span>
+              <span class="slash">/</span>
+              <span>ORBITAL TELEMETRY</span>
+            </div>
+            <h1 class="font-headline-md op-vehicle-title">
+              2024 APEX GT-PRO TWIN-TURBO V8 
+              <span class="vin-tag">// VIN: WBA-849204-{{ licensePlate() }}</span>
+            </h1>
+          </div>
+        </div>
+
+              </section>
+    </div>
+  </main>
+</div>
