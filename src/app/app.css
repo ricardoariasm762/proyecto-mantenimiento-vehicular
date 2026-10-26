@@ -570,3 +570,33 @@
   transform-origin: 397px 250px;
 }
 
+/* Floating HUD pill */
+.cad-hud-floating-pill {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background-color: var(--color-surface-container-low);
+  border: 1px solid var(--border-cad);
+  border-left: 3px solid var(--color-primary);
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-on-surface-variant);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-elevation);
+  backdrop-filter: blur(8px);
+}
+
+.hud-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+}
+
+.sep { color: var(--color-outline); opacity: 0.6; }
+.hud-alert { color: var(--color-secondary); font-weight: 700; }
+
