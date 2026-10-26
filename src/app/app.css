@@ -401,3 +401,40 @@
   font-size: 18px;
 }
 
+/* Badges Group */
+.op-badges-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.op-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background-color: var(--color-surface-container-high);
+  border: 1px solid var(--border-cad);
+  border-radius: 4px;
+  color: var(--color-on-surface-variant);
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.badge-dot.cyan { background-color: var(--color-primary); }
+.badge-dot.orange { background-color: var(--color-secondary-container); }
+.badge-dot.ping { animation: cad-pulse-glow 1.5s infinite ease; }
+
+.highlight { color: var(--color-on-surface); font-weight: 700; }
+.highlight-orange { color: var(--color-secondary); font-weight: 700; }
+.highlight-cyan { color: var(--color-primary); font-weight: 700; }
+
+.badge-icon {
+  font-size: 15px;
+  color: var(--color-primary);
+}
+
