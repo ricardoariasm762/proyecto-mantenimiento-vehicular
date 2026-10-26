@@ -503,6 +503,31 @@
             </textarea>
           </div>
 
+          <!-- Quick Presets Selector Chips -->
+          <div class="cad-presets-row">
+            <span class="font-label-sm preset-tag-label">TELEMETRY PRESETS:</span>
+            <div class="preset-chips-list">
+              <button type="button" class="preset-chip" (click)="loadPreset('transmision')">
+                <span class="chip-dot trans"></span> Transmisión
+              </button>
+              <button type="button" class="preset-chip" (click)="loadPreset('frenos')">
+                <span class="chip-dot brake"></span> Frenos
+              </button>
+              <button type="button" class="preset-chip" (click)="loadPreset('suspension')">
+                <span class="chip-dot susp"></span> Suspensión
+              </button>
+              <button type="button" class="preset-chip" (click)="loadPreset('motor')">
+                <span class="chip-dot engine"></span> Motor
+              </button>
+              <button type="button" class="preset-chip" (click)="loadPreset('electrico')">
+                <span class="chip-dot elec"></span> Eléctrico
+              </button>
+              <button type="button" class="preset-chip" (click)="loadPreset('normal')">
+                <span class="chip-dot ok"></span> Normal
+              </button>
+            </div>
+          </div>
+
                   </div>
       </section>
     </div>
