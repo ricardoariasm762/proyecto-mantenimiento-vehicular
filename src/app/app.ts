@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { VehicleApiService } from './core/services/vehicle-api.service';
 import { VoiceInputService } from './core/services/voice-input.service';
 import { ThemeService, ThemePreference } from './core/services/theme.service';
+import { AuthService } from './core/services/auth.service';
+import { LoginComponent } from './features/auth/login.component';
+import { RegisterComponent } from './features/auth/register.component';
 import {
   VehicleDiagnosisLog,
   VehicleDiagnosisRequest,
@@ -17,7 +20,9 @@ import {
     CommonModule,
     FormsModule,
     DecimalPipe,
-    DatePipe
+    DatePipe,
+    LoginComponent,
+    RegisterComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -26,9 +31,14 @@ export class App implements OnInit, OnDestroy {
   public readonly themeService = inject(ThemeService);
   private readonly apiService = inject(VehicleApiService);
   public readonly voiceService = inject(VoiceInputService);
+  public readonly authService = inject(AuthService);
 
   // Navegación
   public readonly activeNav = signal<string>('diagnostico-predictivo');
+
+  // Estado del Modal de Autenticación
+  public readonly showAuthModal = signal<boolean>(false);
+  public readonly authModalTab = signal<'login' | 'register'>('login');
 
   // Capas del CAD Blueprint
   public readonly activeLayer = signal<'wireframe' | 'thermal' | 'kinematics'>('wireframe');
@@ -53,6 +63,11 @@ export class App implements OnInit, OnDestroy {
   public readonly rawSymptomText = signal<string>(
     'Noticeable rattle and high vibration when accelerating over 60 km/h, accompanied by intermittent transmission slip between 3rd and 4th gear under load.'
   );
+
+  // Estado de taller y órdenes mecánicas
+  public readonly workshopOrders = signal<Array<{ id: string; plate: string; fault: string; date: string; status: string }>>([
+    { id: 'OT-9841', plate: 'TRX-720', fault: 'Falla en Transmisión (Deslizamiento Convertidor)', date: '2026-11-11 12:40', status: 'EMITIDA' }
+  ]);
 
   // Estado de envío y diagnóstico
   public readonly isSubmitting = signal<boolean>(false);
@@ -124,12 +139,27 @@ export class App implements OnInit, OnDestroy {
         this.rawSymptomText.set(voiceText);
       }
     });
+
+    // Sincronizar placa cuando el usuario cambia o se autentica
+    effect(() => {
+      const user = this.authService.currentUser();
+      if (user && user.defaultLicensePlate) {
+        this.licensePlate.set(user.defaultLicensePlate);
+      }
+    });
   }
 
   ngOnInit(): void {
     this.startClock();
     this.startOscilloscopeAnimation();
-    this.loadHistory();
+
+    // Si ya hay usuario autenticado, inicializar su placa asignada
+    const user = this.authService.currentUser();
+    if (user && user.defaultLicensePlate) {
+      this.licensePlate.set(user.defaultLicensePlate);
+    }
+
+    this.loadHistory(this.licensePlate());
   }
 
   ngOnDestroy(): void {
@@ -156,10 +186,8 @@ export class App implements OnInit, OnDestroy {
       const current = this.spectrumBars();
       const updated = current.map((val) => {
         if (isListening) {
-          // Altura más dinámica cuando se graba voz
           return Math.floor(Math.random() * 32) + 8;
         } else {
-          // Movimiento de latencia suave tipo osciloscopio en espera
           const delta = (Math.random() - 0.5) * 6;
           const nextVal = Math.round(val + delta);
           return Math.max(6, Math.min(38, nextVal));
@@ -169,7 +197,45 @@ export class App implements OnInit, OnDestroy {
     }, 180);
   }
 
+  public openAuthModal(tab: 'login' | 'register' = 'login'): void {
+    this.authModalTab.set(tab);
+    this.showAuthModal.set(true);
+  }
+
+  public closeAuthModal(): void {
+    this.showAuthModal.set(false);
+  }
+
+  public onAuthSuccess(): void {
+    this.showAuthModal.set(false);
+    const user = this.authService.currentUser();
+    if (user) {
+      if (user.defaultLicensePlate) {
+        this.licensePlate.set(user.defaultLicensePlate);
+      }
+      this.showNotification(`Sesión iniciada correctamente: ${user.fullName || user.email} [${user.role}]`);
+      this.loadHistory(this.licensePlate());
+    }
+  }
+
+  public logout(): void {
+    const user = this.authService.currentUser();
+    this.authService.logout();
+    this.showNotification(`Sesión cerrada para ${user?.fullName || 'operador'}. Modo invitado activado.`);
+    this.loadHistory(this.licensePlate());
+  }
+
   public toggleVoiceRecognition(): void {
+    // Si no está autenticado, sugerir login
+    if (!this.authService.isAuthenticated()) {
+      this.showNotification('Aviso: Inicie sesión como Conductor para asociar el dictado a su vehículo.');
+    }
+
+    // Restringir dictado a conductores según RBAC
+    if (this.authService.isAuthenticated() && this.authService.isMechanic()) {
+      this.showNotification('Modo Taller (Mecánico): El dictado por voz está optimizado para conductores en ruta.');
+    }
+
     if (this.voiceService.isListening()) {
       this.voiceService.stopListening();
     } else {
@@ -261,6 +327,13 @@ export class App implements OnInit, OnDestroy {
       return;
     }
 
+    // Si no está autenticado, sugerir login para registrar quién reportó la falla
+    if (!this.authService.isAuthenticated()) {
+      this.openAuthModal('login');
+      this.showNotification('Acceso requerido: Inicie sesión para persistir el diagnóstico con su identidad.');
+      return;
+    }
+
     if (this.voiceService.isListening()) {
       this.voiceService.stopListening();
     }
@@ -281,13 +354,18 @@ export class App implements OnInit, OnDestroy {
         this.currentResult.set(response);
         this.isSubmitting.set(false);
         this.loadHistory(response.licensePlate);
-        this.showNotification(`Diagnóstico predictivo calculado exitosamente para ${response.licensePlate}`);
+        this.showNotification(`✓ Diagnóstico predictivo registrado en PostgreSQL para ${response.licensePlate}`);
       },
       error: (err) => {
-        console.warn('Backend API no respondió o error en servidor:', err);
         this.isSubmitting.set(false);
+        if (err.status === 403) {
+          const detail = err.error?.message || 'Los conductores solo pueden diagnosticar sus vehículos asignados.';
+          this.errorMessage.set(`Acceso Denegado (RBAC): ${detail}`);
+          return;
+        }
 
-        // Fallback enriquecido: Realizar inferencia local inteligente para no bloquear la experiencia de usuario
+        console.warn('Backend API no respondió o error en servidor:', err);
+        // Fallback local contingente si el backend no está iniciado
         const localInference = this.generateLocalFallback(payload);
         this.currentResult.set(localInference);
 
@@ -359,8 +437,13 @@ export class App implements OnInit, OnDestroy {
 
   public loadHistory(licensePlate?: string): void {
     this.isLoadingHistory.set(true);
-    const obs$ = licensePlate && licensePlate.trim().length > 0
-      ? this.apiService.getHistoryByPlate(licensePlate)
+
+    // Si es mecánico y no se especifica placa, consultar todo el historial global
+    const isMech = this.authService.isMechanic();
+    const plate = licensePlate && licensePlate.trim().length > 0 ? licensePlate.trim() : (isMech ? '' : this.licensePlate());
+
+    const obs$ = plate.length > 0
+      ? this.apiService.getHistoryByPlate(plate)
       : this.apiService.getAllHistory();
 
     obs$.subscribe({
@@ -368,9 +451,16 @@ export class App implements OnInit, OnDestroy {
         this.historyList.set(data || []);
         this.isLoadingHistory.set(false);
       },
-      error: () => {
-        // En caso de que el backend aún no esté corriendo en 8082, poblar con datos de telemetría de demostración
+      error: (err) => {
         this.isLoadingHistory.set(false);
+        if (err.status === 403) {
+          const detail = err.error?.message || 'Acceso restringido: no tiene permisos para ver el historial de esta placa.';
+          this.errorMessage.set(`Acceso Denegado (RBAC): ${detail}`);
+          this.historyList.set([]);
+          return;
+        }
+
+        // Datos de respaldo local para visualización
         if (this.historyList().length === 0) {
           this.historyList.set([
             {
@@ -385,32 +475,6 @@ export class App implements OnInit, OnDestroy {
               confidencePercentage: 68.4,
               recommendedAction: 'Inspeccionar convertidor de par dentro de 400 km',
               createdAt: new Date().toISOString()
-            },
-            {
-              id: 100,
-              licensePlate: 'FRN-312',
-              mileageKm: 68000,
-              kmSinceLastService: 15000,
-              fuelConsumptionRatio: 1.02,
-              rawSymptomText: 'Chirrido agudo metálico al frenar',
-              detectedSystem: 'Frenos',
-              predictedFault: 'Desgaste Pastillas de Freno',
-              confidencePercentage: 91.5,
-              recommendedAction: 'Reemplazo de pastillas delanteras',
-              createdAt: new Date(Date.now() - 86400000).toISOString()
-            },
-            {
-              id: 99,
-              licensePlate: 'MTR-505',
-              mileageKm: 159200,
-              kmSinceLastService: 18000,
-              fuelConsumptionRatio: 1.45,
-              rawSymptomText: 'Pérdida de fuerza y humo blanco',
-              detectedSystem: 'Motor',
-              predictedFault: 'Inyección / Compresión Motor',
-              confidencePercentage: 88.0,
-              recommendedAction: 'Revisión técnica de inyectores',
-              createdAt: new Date(Date.now() - 172800000).toISOString()
             }
           ]);
         }
@@ -422,7 +486,17 @@ export class App implements OnInit, OnDestroy {
     if (action === 'schedule') {
       this.showNotification('✓ Cita de servicio mecánico registrada en el sistema de telemetría.');
     } else if (action === 'order') {
-      this.showNotification('✓ Orden de repuesto OE Kit #TR-80-FK2 confirmada.');
+      const orderId = `OT-${Math.floor(1000 + Math.random() * 9000)}`;
+      const fault = this.currentResult()?.primaryFault || 'Mantenimiento Correctivo';
+      const plate = this.licensePlate();
+      const date = new Date().toISOString().replace('T', ' ').substring(0, 16);
+
+      this.workshopOrders.update(orders => [
+        { id: orderId, plate, fault, date, status: 'CONFIRMADA' },
+        ...orders
+      ]);
+
+      this.showNotification(`✓ Orden de Taller #${orderId} emitida exitosamente para vehículo ${plate}.`);
     } else if (action === 'selfTest') {
       this.showNotification('✓ Auto-diagnóstico OBD-II iniciado: Ciclo de aprendizaje CAN restablecido.');
     }
@@ -434,10 +508,13 @@ export class App implements OnInit, OnDestroy {
       if (this.actionNotification() === msg) {
         this.actionNotification.set(null);
       }
-    }, 4000);
+    }, 4500);
   }
 
   public setNav(nav: string): void {
     this.activeNav.set(nav);
+    if (nav === 'historial-de-fallas-obd-ii') {
+      this.loadHistory(this.authService.isMechanic() ? '' : this.licensePlate());
+    }
   }
 }
