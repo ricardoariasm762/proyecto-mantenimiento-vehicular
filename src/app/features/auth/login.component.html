@@ -1,0 +1,111 @@
+<div class="auth-blueprint-card">
+  <!-- CAD Chamfers -->
+  <span class="cad-corner-tl">┌ AUTH://01</span>
+  <span class="cad-corner-tr">0x7F ┐</span>
+  <span class="cad-corner-bl">└ SEC-RBAC</span>
+  <span class="cad-corner-br">JWT ┘</span>
+
+  <div class="auth-header">
+    <div class="auth-icon-pod">
+      <span class="material-symbols-outlined auth-icon">lock_open</span>
+    </div>
+    <div class="auth-title-cluster">
+      <span class="font-label-sm sys-tag">SECURITY CLEARANCE // JWT RBAC</span>
+      <h2 class="font-headline-md auth-title">CONTROL DE ACCESO VELOCE</h2>
+      <p class="font-body-sm auth-sub">Ingrese sus credenciales de operador para habilitar telemetría y diagnósticos.</p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="auth-alert-box error">
+      <span class="material-symbols-outlined">gpp_bad</span>
+      <span class="font-body-sm">{{ errorMessage() }}</span>
+    </div>
+  }
+
+  <!-- Quick Demo Access Cluster -->
+  <div class="demo-presets-cluster">
+    <span class="font-label-sm demo-label">ACCESO RÁPIDO DEMO:</span>
+    <div class="demo-buttons-row">
+      <button 
+        type="button" 
+        class="demo-chip chip-driver" 
+        (click)="fillPreset('driver')"
+        title="Cargar credenciales de Conductor">
+        <span class="material-symbols-outlined">directions_car</span>
+        <span>CONDUCTOR (Carlos)</span>
+      </button>
+      <button 
+        type="button" 
+        class="demo-chip chip-mechanic" 
+        (click)="fillPreset('mechanic')"
+        title="Cargar credenciales de Mecánico">
+        <span class="material-symbols-outlined">build</span>
+        <span>MECÁNICO (Ing. Celli)</span>
+      </button>
+    </div>
+  </div>
+
+  <form class="auth-form" (ngSubmit)="onLogin()">
+    <div class="form-group">
+      <label class="font-label-sm form-label" for="login-email">
+        <span>CORREO ELECTRÓNICO (SYS ID)</span>
+      </label>
+      <div class="input-with-icon">
+        <span class="material-symbols-outlined input-icon">mail</span>
+        <input 
+          id="login-email"
+          type="email" 
+          class="cad-input" 
+          [ngModel]="email()" 
+          (ngModelChange)="email.set($event)"
+          name="email"
+          placeholder="operador@veloce.com" 
+          required 
+          autocomplete="email" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="font-label-sm form-label" for="login-password">
+        <span>CONTRASEÑA OPERACIONAL</span>
+      </label>
+      <div class="input-with-icon">
+        <span class="material-symbols-outlined input-icon">key</span>
+        <input 
+          id="login-password"
+          type="password" 
+          class="cad-input" 
+          [ngModel]="password()" 
+          (ngModelChange)="password.set($event)"
+          name="password"
+          placeholder="••••••••••••" 
+          required 
+          autocomplete="current-password" />
+      </div>
+    </div>
+
+    <div class="auth-actions">
+      <button 
+        type="submit" 
+        class="cad-btn-primary submit-btn" 
+        [disabled]="isLoading()">
+        @if (isLoading()) {
+          <div class="spinner"></div>
+          <span>AUTENTICANDO TOKEN JWT...</span>
+        } @else {
+          <span class="material-symbols-outlined">login</span>
+          <span>INICIAR SESIÓN SEGURA</span>
+        }
+      </button>
+    </div>
+
+    <div class="auth-footer-links">
+      <span class="font-body-sm">¿No tiene credenciales de flota o desea registrar su vehículo?</span>
+      <button type="button" class="link-btn font-label-md" (click)="onGoToRegister()">
+        <span>REGISTRARSE / REGISTRAR NUEVO VEHÍCULO →</span>
+      </button>
+    </div>
+  </form>
+</div>
+
