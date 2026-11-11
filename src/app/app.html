@@ -109,19 +109,56 @@
           <span class="font-label-sm clock-sync">SYNC: ATOMIC-TICK</span>
         </div>
 
-        <!-- Operator Badge -->
-        <div class="operator-badge">
-          <div class="operator-meta">
-            <span class="font-label-sm op-name">ING. M. CELLI</span>
-            <span class="font-label-sm op-role">CHIEF TELEMETRY</span>
+        <!-- Operator Badge / Auth Controls -->
+        @if (authService.isAuthenticated()) {
+          <div class="operator-badge" [class.badge-driver]="authService.isDriver()" [class.badge-mechanic]="authService.isMechanic()">
+            <div class="operator-meta">
+              <span class="font-label-sm op-name">{{ authService.userFullName() }}</span>
+              <div class="op-sub-row">
+                <span class="font-label-sm op-role" [class.text-amber]="authService.isDriver()" [class.text-cyan]="authService.isMechanic()">
+                  [{{ authService.userRoleLabel() }}]
+                </span>
+                <span class="font-label-sm op-plate">VIN: {{ licensePlate() }}</span>
+              </div>
+            </div>
+            <div class="operator-avatar" [class.avatar-driver]="authService.isDriver()" [class.avatar-mechanic]="authService.isMechanic()">
+              <span class="material-symbols-outlined op-ico">
+                {{ authService.isMechanic() ? 'engineering' : 'directions_car' }}
+              </span>
+            </div>
+            <button 
+              type="button" 
+              class="cad-header-logout-btn font-label-sm" 
+              (click)="logout()" 
+              title="Cerrar sesión actual">
+              <span class="material-symbols-outlined">logout</span>
+              <span>SALIR</span>
+            </button>
           </div>
-          <div class="operator-avatar">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
+        } @else {
+          <div class="operator-guest-pod">
+            <div class="guest-meta">
+              <span class="font-label-sm guest-tag">OPERADOR NO AUTENTICADO</span>
+              <span class="font-label-sm guest-sub">MODO INVITADO [RBAC INACTIVO]</span>
+            </div>
+            <div class="guest-actions">
+              <button 
+                type="button" 
+                class="cad-btn-primary btn-header-login" 
+                (click)="openAuthModal('login')">
+                <span class="material-symbols-outlined">login</span>
+                <span>ACCEDER</span>
+              </button>
+              <button 
+                type="button" 
+                class="cad-btn-secondary btn-header-reg" 
+                (click)="openAuthModal('register')">
+                <span class="material-symbols-outlined">person_add</span>
+                <span>REGISTRO</span>
+              </button>
+            </div>
           </div>
-        </div>
+        }
 
       </div>
 
@@ -897,16 +934,41 @@
         <div class="history-header-bar">
           <div class="history-title-group">
             <span class="material-symbols-outlined icon-cyan">history</span>
-            <h3 class="font-headline-sm history-title">HISTORIAL DE BITÁCORA VEHICULAR (POSTGRESQL / CAN-BUS)</h3>
+            <div>
+              <h3 class="font-headline-sm history-title">HISTORIAL DE BITÁCORA VEHICULAR (POSTGRESQL / CAN-BUS)</h3>
+              <div class="history-sub-meta font-label-sm">
+                @if (authService.isMechanic()) {
+                  <span class="text-cyan">MODO TALLER: ACCESO GLOBAL AUTORIZADO (TODAS LAS PLACAS)</span>
+                } @else if (authService.isDriver()) {
+                  <span class="text-amber">MODO CONDUCTOR: CONSULTANDO HISTORIAL ASIGNADO (PLACA {{ licensePlate() }})</span>
+                } @else {
+                  <span class="text-outline">MODO INVITADO: HISTORIAL DE TELEMETRÍA DEMOSTRATIVA</span>
+                }
+              </div>
+            </div>
           </div>
-          <button 
-            type="button" 
-            class="cad-btn-secondary refresh-btn" 
-            (click)="loadHistory(licensePlate())" 
-            [disabled]="isLoadingHistory()">
-            <span class="material-symbols-outlined" [class.spinning]="isLoadingHistory()">sync</span>
-            <span>ACTUALIZAR BITÁCORA</span>
-          </button>
+
+          <div class="history-controls-cluster">
+            @if (authService.isMechanic()) {
+              <button 
+                type="button" 
+                class="cad-btn-secondary" 
+                (click)="loadHistory('')" 
+                [disabled]="isLoadingHistory()"
+                title="Consultar bitácora de toda la flota vehicular">
+                <span class="material-symbols-outlined">dataset</span>
+                <span>HISTORIAL GLOBAL FLOTA</span>
+              </button>
+            }
+            <button 
+              type="button" 
+              class="cad-btn-secondary refresh-btn" 
+              (click)="loadHistory(licensePlate())" 
+              [disabled]="isLoadingHistory()">
+              <span class="material-symbols-outlined" [class.spinning]="isLoadingHistory()">sync</span>
+              <span>FILTRAR PLACA {{ licensePlate() }}</span>
+            </button>
+          </div>
         </div>
 
         @if (isLoadingHistory()) {
@@ -916,7 +978,7 @@
           </div>
         } @else if (historyList().length === 0) {
           <div class="history-empty-pod">
-            <p class="font-body-md">No se han registrado diagnósticos previos para la placa actual.</p>
+            <p class="font-body-md">No se han registrado diagnósticos previos para la consulta actual.</p>
           </div>
         } @else {
           <div class="cad-table-wrap">
@@ -929,6 +991,7 @@
                   <th>FALLA CLASIFICADA</th>
                   <th>CERTEZA AI</th>
                   <th>ODÓMETRO</th>
+                  <th>REPORTADO POR</th>
                 </tr>
               </thead>
               <tbody>
@@ -944,6 +1007,12 @@
                       <span class="cad-confidence-pill">{{ item.confidencePercentage | number:'1.1-1' }}%</span>
                     </td>
                     <td class="font-label-sm cell-mileage">{{ item.mileageKm | number }} KM</td>
+                    <td class="font-label-sm cell-operator">
+                      <div class="operator-cell-pod">
+                        <span class="material-symbols-outlined op-mini-ico">person</span>
+                        <span>{{ item.reportedBy?.fullName || item.reportedBy?.email || 'Conductor Flota' }}</span>
+                      </div>
+                    </td>
                   </tr>
                 }
               </tbody>
@@ -951,6 +1020,52 @@
           </div>
         }
       </section>
+
+      <!-- ==================== 7.1 SECCIÓN EXCLUSIVA TALLER MECÁNICO (ÓRDENES DE TALLER) ==================== -->
+      @if (authService.isMechanic()) {
+        <section class="cad-panel workshop-orders-section">
+          <div class="workshop-header">
+            <div class="ws-title-cluster">
+              <span class="material-symbols-outlined icon-amber">construction</span>
+              <div>
+                <h3 class="font-headline-sm ws-title">EMISIÓN DE ÓRDENES DE TALLER MECÁNICO (RBAC: ROLE_MECHANIC)</h3>
+                <span class="font-label-sm ws-sub">Gestión prescriptiva de órdenes de servicio y despacho de repuestos para cualquier placa.</span>
+              </div>
+            </div>
+            <button type="button" class="cad-btn-action" (click)="handlePrescriptiveAction('order')">
+              <span class="material-symbols-outlined">add_task</span>
+              <span>EMITIR ORDEN PARA {{ licensePlate() }}</span>
+            </button>
+          </div>
+
+          <div class="orders-table-wrap">
+            <table class="cad-orders-table">
+              <thead>
+                <tr class="font-label-sm">
+                  <th>ORDEN ID</th>
+                  <th>PLACA VEHÍCULO</th>
+                  <th>FALLA REPORTADA</th>
+                  <th>FECHA EMISIÓN</th>
+                  <th>ESTADO TALLER</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (order of workshopOrders(); track order.id) {
+                  <tr class="font-body-md">
+                    <td class="font-label-md text-amber"><strong>{{ order.id }}</strong></td>
+                    <td class="font-label-md cell-plate"><strong>{{ order.plate }}</strong></td>
+                    <td>{{ order.fault }}</td>
+                    <td class="font-label-sm text-dim">{{ order.date }}</td>
+                    <td>
+                      <span class="status-pill status-confirmed">{{ order.status }}</span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+      }
 
     </div>
   </main>
@@ -973,5 +1088,58 @@
       </div>
     </div>
   </footer>
+
+  <!-- ==================== 9. AUTH MODAL OVERLAY (INDUSTRIAL BLUEPRINT) ==================== -->
+  @if (showAuthModal()) {
+    <div class="cad-modal-backdrop" (click)="closeAuthModal()">
+      <div class="cad-modal-window" (click)="$event.stopPropagation()">
+        
+        <div class="modal-top-bar">
+          <div class="modal-breadcrumbs font-label-sm">
+            <span class="text-cyan">SYS://SECURITY</span>
+            <span class="crumb-separator">/</span>
+            <span>CLEARANCE-VERIFICATION</span>
+          </div>
+          <button type="button" class="modal-close-btn" (click)="closeAuthModal()" title="Cerrar ventana">
+            ✕
+          </button>
+        </div>
+
+        <div class="modal-tab-selector">
+          <button 
+            type="button" 
+            class="modal-tab-toggle" 
+            [class.active]="authModalTab() === 'login'"
+            (click)="authModalTab.set('login')">
+            <span class="material-symbols-outlined">login</span>
+            <span>INICIAR SESIÓN</span>
+          </button>
+          <button 
+            type="button" 
+            class="modal-tab-toggle" 
+            [class.active]="authModalTab() === 'register'"
+            (click)="authModalTab.set('register')">
+            <span class="material-symbols-outlined">person_add</span>
+            <span>REGISTRO DE USUARIO / VEHÍCULO</span>
+          </button>
+        </div>
+
+        <div class="modal-body-content">
+          @if (authModalTab() === 'login') {
+            <app-login 
+              (loginSuccess)="onAuthSuccess()" 
+              (switchToRegister)="authModalTab.set('register')">
+            </app-login>
+          } @else {
+            <app-register 
+              (registerSuccess)="onAuthSuccess()" 
+              (switchToLogin)="authModalTab.set('login')">
+            </app-register>
+          }
+        </div>
+
+      </div>
+    </div>
+  }
 
 </div>
