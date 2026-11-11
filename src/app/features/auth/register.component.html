@@ -1,0 +1,231 @@
+<div class="auth-blueprint-card">
+  <!-- CAD Chamfers -->
+  <span class="cad-corner-tl">┌ ENROLL://02</span>
+  <span class="cad-corner-tr">RBAC-REG ┐</span>
+  <span class="cad-corner-bl">└ SYS-FLEET</span>
+  <span class="cad-corner-br">v4.8 ┘</span>
+
+  <div class="auth-header">
+    <div class="auth-icon-pod">
+      <span class="material-symbols-outlined auth-icon">person_add</span>
+    </div>
+    <div class="auth-title-cluster">
+      <span class="font-label-sm sys-tag">OPERATOR ENROLLMENT // ACCESS CONTROL</span>
+      <h2 class="font-headline-md auth-title">ALTA DE OPERADOR Y VEHÍCULO</h2>
+      <p class="font-body-sm auth-sub">Registre su identidad y configure su rol operacional en el ecosistema Veloce.</p>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="auth-alert-box error">
+      <span class="material-symbols-outlined">gpp_bad</span>
+      <span class="font-body-sm">{{ errorMessage() }}</span>
+    </div>
+  }
+
+  <!-- Interactive Role Selector -->
+  <div class="role-selector-pod">
+    <span class="font-label-sm section-title">SELECCIONE EL ROL OPERACIONAL (RBAC):</span>
+    <div class="role-buttons-grid">
+      <button 
+        type="button" 
+        class="role-card" 
+        [class.selected]="role() === 'ROLE_DRIVER'"
+        (click)="selectRole('ROLE_DRIVER')">
+        <div class="role-icon-box driver">
+          <span class="material-symbols-outlined">directions_car</span>
+        </div>
+        <div class="role-meta">
+          <span class="font-headline-sm role-name">CONDUCTOR DE FLOTA</span>
+          <span class="font-label-sm role-code">[ROLE_DRIVER]</span>
+          <p class="font-body-sm role-desc">Dictado por voz, registro de odómetro y telemetría de vehículo asignado.</p>
+        </div>
+      </button>
+
+      <button 
+        type="button" 
+        class="role-card" 
+        [class.selected]="role() === 'ROLE_MECHANIC'"
+        (click)="selectRole('ROLE_MECHANIC')">
+        <div class="role-icon-box mechanic">
+          <span class="material-symbols-outlined">home_repair_service</span>
+        </div>
+        <div class="role-meta">
+          <span class="font-headline-sm role-name">TALLER MECÁNICO</span>
+          <span class="font-label-sm role-code">[ROLE_MECHANIC]</span>
+          <p class="font-body-sm role-desc">Historial global de todas las placas y emisión de órdenes de servicio.</p>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <form class="auth-form" (ngSubmit)="onRegister()">
+    
+    <!-- User Personal Info Grid -->
+    <div class="form-row">
+      <div class="form-group flex-1">
+        <label class="font-label-sm form-label" for="reg-name">NOMBRE COMPLETO</label>
+        <div class="input-with-icon">
+          <span class="material-symbols-outlined input-icon">badge</span>
+          <input 
+            id="reg-name"
+            type="text" 
+            class="cad-input" 
+            [ngModel]="fullName()" 
+            (ngModelChange)="fullName.set($event)"
+            name="fullName"
+            placeholder="Ej. Ing. Carlos Mendoza" 
+            required />
+        </div>
+      </div>
+
+      <div class="form-group flex-1">
+        <label class="font-label-sm form-label" for="reg-phone">TELÉFONO DE CONTACTO</label>
+        <div class="input-with-icon">
+          <span class="material-symbols-outlined input-icon">call</span>
+          <input 
+            id="reg-phone"
+            type="tel" 
+            class="cad-input" 
+            [ngModel]="phone()" 
+            (ngModelChange)="phone.set($event)"
+            name="phone"
+            placeholder="+57 300 000 0000" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group flex-1">
+        <label class="font-label-sm form-label" for="reg-email">CORREO ELECTRÓNICO (SYS ID)</label>
+        <div class="input-with-icon">
+          <span class="material-symbols-outlined input-icon">mail</span>
+          <input 
+            id="reg-email"
+            type="email" 
+            class="cad-input" 
+            [ngModel]="email()" 
+            (ngModelChange)="email.set($event)"
+            name="email"
+            placeholder="operador@veloce.com" 
+            required />
+        </div>
+      </div>
+
+      <div class="form-group flex-1">
+        <label class="font-label-sm form-label" for="reg-password">CONTRASEÑA OPERATIVA</label>
+        <div class="input-with-icon">
+          <span class="material-symbols-outlined input-icon">key</span>
+          <input 
+            id="reg-password"
+            type="password" 
+            class="cad-input" 
+            [ngModel]="password()" 
+            (ngModelChange)="password.set($event)"
+            name="password"
+            placeholder="Mínimo 6 caracteres" 
+            required />
+        </div>
+      </div>
+    </div>
+
+    <!-- Conditional Vehicle Registration Box for Drivers -->
+    @if (role() === 'ROLE_DRIVER') {
+      <div class="vehicle-enrollment-pod">
+        <div class="veh-pod-header">
+          <span class="material-symbols-outlined icon-amber">garage</span>
+          <span class="font-label-sm veh-title">VINCULAR NUEVO VEHÍCULO ASIGNADO (CHASSIS TELEMETRY)</span>
+        </div>
+        <p class="font-body-sm veh-sub">Los conductores deben tener al menos un vehículo vinculado para registrar síntomas y kilometraje.</p>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="font-label-sm form-label" for="veh-plate">PLACA / MATRÍCULA</label>
+            <input 
+              id="veh-plate"
+              type="text" 
+              class="cad-input text-plate" 
+              [ngModel]="licensePlate()" 
+              (ngModelChange)="licensePlate.set($event)"
+              name="licensePlate"
+              placeholder="Ej. TRX-720" />
+          </div>
+
+          <div class="form-group flex-1">
+            <label class="font-label-sm form-label" for="veh-brand">MARCA / FABRICANTE</label>
+            <input 
+              id="veh-brand"
+              type="text" 
+              class="cad-input" 
+              [ngModel]="brand()" 
+              (ngModelChange)="brand.set($event)"
+              name="brand"
+              placeholder="Toyota" />
+          </div>
+
+          <div class="form-group flex-1">
+            <label class="font-label-sm form-label" for="veh-model">MODELO</label>
+            <input 
+              id="veh-model"
+              type="text" 
+              class="cad-input" 
+              [ngModel]="model()" 
+              (ngModelChange)="model.set($event)"
+              name="model"
+              placeholder="Hilux Turbo" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="font-label-sm form-label" for="veh-year">AÑO</label>
+            <input 
+              id="veh-year"
+              type="number" 
+              class="cad-input" 
+              [ngModel]="modelYear()" 
+              (ngModelChange)="modelYear.set($event)"
+              name="modelYear"
+              placeholder="2023" />
+          </div>
+
+          <div class="form-group flex-1">
+            <label class="font-label-sm form-label" for="veh-mileage">KILOMETRAJE BASE (KM)</label>
+            <input 
+              id="veh-mileage"
+              type="number" 
+              class="cad-input" 
+              [ngModel]="baseMileageKm()" 
+              (ngModelChange)="baseMileageKm.set($event)"
+              name="baseMileageKm"
+              placeholder="64820" />
+          </div>
+        </div>
+      </div>
+    }
+
+    <div class="auth-actions">
+      <button 
+        type="submit" 
+        class="cad-btn-primary submit-btn" 
+        [disabled]="isLoading()">
+        @if (isLoading()) {
+          <div class="spinner"></div>
+          <span>CONFIRMANDO REGISTRO EN BASE DE DATOS...</span>
+        } @else {
+          <span class="material-symbols-outlined">check_circle</span>
+          <span>COMPLETAR REGISTRO DE CUENTA</span>
+        }
+      </button>
+    </div>
+
+    <div class="auth-footer-links">
+      <span class="font-body-sm">¿Ya posee una cuenta registrada en el sistema?</span>
+      <button type="button" class="link-btn font-label-md" (click)="onGoToLogin()">
+        <span>← VOLVER AL INICIO DE SESIÓN</span>
+      </button>
+    </div>
+
+  </form>
+</div>
+
