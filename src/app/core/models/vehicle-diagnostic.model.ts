@@ -26,5 +26,11 @@ export interface VehicleDiagnosisLog {
   predictedFault: string;
   confidencePercentage: number;
   recommendedAction: string;
+  reportedBy?: {
+    id?: number;
+    fullName?: string;
+    email?: string;
+    role?: string;
+  };
   createdAt: string;
 }
