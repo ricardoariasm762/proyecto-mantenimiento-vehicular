@@ -4,6 +4,8 @@
    Modes: Dark (Default) & Light (System-aware)
    ========================================================================== */
 
+/* Web Fonts fallback to system fonts offline */
+
 :root {
   /* Typography Tokens */
   --font-headline: 'Barlow Condensed', -apple-system, BlinkMacSystemFont, sans-serif;
