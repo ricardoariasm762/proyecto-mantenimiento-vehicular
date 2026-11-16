@@ -4,7 +4,7 @@
    Modes: Dark (Default) & Light (System-aware)
    ========================================================================== */
 
-/* Web Fonts fallback to system fonts offline */
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 
 :root {
   /* Typography Tokens */
@@ -154,14 +154,18 @@ html, body {
   font-family: 'Material Symbols Outlined';
   font-weight: normal;
   font-style: normal;
-  display: inline-block;
+  font-size: 20px;
   line-height: 1;
   text-transform: none;
   letter-spacing: normal;
   word-wrap: normal;
   white-space: nowrap;
   direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'liga';
   vertical-align: middle;
+  user-select: none;
 }
 
 /* Typography Utility Classes matching Stitch */
