@@ -74,7 +74,6 @@ export class RegisterComponent {
       next: (user) => {
         this.isLoading.set(false);
         this.registerSuccess.emit();
-        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         this.isLoading.set(false);
@@ -86,7 +85,6 @@ export class RegisterComponent {
 
   public onGoToLogin(): void {
     this.switchToLogin.emit();
-    this.router.navigate(['/login']);
   }
 }
 

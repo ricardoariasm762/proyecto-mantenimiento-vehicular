@@ -23,7 +23,7 @@ export const mechanicGuard: CanActivateFn = () => {
   }
 
   console.warn('Access denied: View reserved exclusively for Mechanics');
-  router.navigate(['/dashboard']);
+  router.navigate(['/']);
   return false;
 };
 
@@ -36,7 +36,27 @@ export const driverGuard: CanActivateFn = () => {
   }
 
   console.warn('Access denied: View reserved exclusively for Drivers');
-  router.navigate(['/dashboard']);
+  router.navigate(['/']);
   return false;
+};
+
+export const roleGuard = (expectedRole: 'ROLE_DRIVER' | 'ROLE_MECHANIC'): CanActivateFn => {
+  return () => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    if (!authService.isAuthenticated()) {
+      router.navigate(['/']);
+      return false;
+    }
+
+    const currentRole = authService.currentUser()?.role;
+    if (currentRole === expectedRole) {
+      return true;
+    }
+
+    router.navigate(['/']);
+    return false;
+  };
 };
 

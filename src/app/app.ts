@@ -36,8 +36,8 @@ export class App implements OnInit, OnDestroy {
   // Navigation
   public readonly activeNav = signal<string>('diagnostico-predictivo');
 
-  // Authentication modal state
-  public readonly showAuthModal = signal<boolean>(false);
+  // Authentication modal state (defaults to true if user is not yet logged in)
+  public readonly showAuthModal = signal<boolean>(!this.authService.isAuthenticated());
   public readonly authModalTab = signal<'login' | 'register'>('login');
 
   // CAD Blueprint layers
@@ -153,13 +153,17 @@ export class App implements OnInit, OnDestroy {
     this.startClock();
     this.startOscilloscopeAnimation();
 
-    // If authenticated user is already present, initialize their assigned plate
+    // If authenticated user is already present, initialize their assigned plate and history
     const user = this.authService.currentUser();
-    if (user && user.defaultLicensePlate) {
-      this.licensePlate.set(user.defaultLicensePlate);
+    if (user) {
+      if (user.defaultLicensePlate) {
+        this.licensePlate.set(user.defaultLicensePlate);
+      }
+      this.loadHistory(this.licensePlate());
+    } else {
+      // If not authenticated, open login modal automatically and do not query protected history
+      this.openAuthModal('login');
     }
-
-    this.loadHistory(this.licensePlate());
   }
 
   ngOnDestroy(): void {
@@ -208,6 +212,7 @@ export class App implements OnInit, OnDestroy {
 
   public onAuthSuccess(): void {
     this.showAuthModal.set(false);
+    this.errorMessage.set(null);
     const user = this.authService.currentUser();
     if (user) {
       if (user.defaultLicensePlate) {
@@ -221,8 +226,10 @@ export class App implements OnInit, OnDestroy {
   public logout(): void {
     const user = this.authService.currentUser();
     this.authService.logout();
+    this.historyList.set([]);
+    this.errorMessage.set(null);
     this.showNotification(`Sesión cerrada para ${user?.fullName || 'operador'}. Modo invitado activado.`);
-    this.loadHistory(this.licensePlate());
+    this.openAuthModal('login');
   }
 
   public toggleVoiceRecognition(): void {
@@ -436,7 +443,15 @@ export class App implements OnInit, OnDestroy {
   }
 
   public loadHistory(licensePlate?: string): void {
+    if (!this.authService.isAuthenticated()) {
+      // Do not attempt to query protected backend history if unauthenticated
+      this.historyList.set([]);
+      this.isLoadingHistory.set(false);
+      return;
+    }
+
     this.isLoadingHistory.set(true);
+    this.errorMessage.set(null);
 
     // If mechanic and no plate specified, query entire global history
     const isMech = this.authService.isMechanic();
@@ -453,6 +468,12 @@ export class App implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.isLoadingHistory.set(false);
+        if (err.status === 401) {
+          this.openAuthModal('login');
+          this.errorMessage.set('Sesión requerida o expirada. Por favor inicie sesión.');
+          this.historyList.set([]);
+          return;
+        }
         if (err.status === 403) {
           const detail = err.error?.message || 'Acceso restringido: no tiene permisos para ver el historial de esta placa.';
           this.errorMessage.set(`Acceso Denegado (RBAC): ${detail}`);
@@ -460,24 +481,8 @@ export class App implements OnInit, OnDestroy {
           return;
         }
 
-        // Local fallback data for visualization
-        if (this.historyList().length === 0) {
-          this.historyList.set([
-            {
-              id: 101,
-              licensePlate: 'TRX-720',
-              mileageKm: 64820,
-              kmSinceLastService: 8450,
-              fuelConsumptionRatio: 1.12,
-              rawSymptomText: 'Noticeable rattle and high vibration when accelerating over 60 km/h',
-              detectedSystem: 'Transmisión',
-              predictedFault: 'Falla en Transmisión (P0741)',
-              confidencePercentage: 68.4,
-              recommendedAction: 'Inspeccionar convertidor de par dentro de 400 km',
-              createdAt: new Date().toISOString()
-            }
-          ]);
-        }
+        // Local fallback data for visualization only if server is unreachable
+        this.historyList.set([]);
       }
     });
   }
@@ -514,6 +519,11 @@ export class App implements OnInit, OnDestroy {
   public setNav(nav: string): void {
     this.activeNav.set(nav);
     if (nav === 'historial-de-fallas-obd-ii') {
+      if (!this.authService.isAuthenticated()) {
+        this.openAuthModal('login');
+        this.showNotification('Acceso restringido: Inicie sesión para ver el historial de diagnósticos.');
+        return;
+      }
       this.loadHistory(this.authService.isMechanic() ? '' : this.licensePlate());
     }
   }

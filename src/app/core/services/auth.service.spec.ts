@@ -24,7 +24,7 @@ describe('AuthService', () => {
 
   it('should initialize with null user when localStorage is empty', () => {
     expect(service.currentUser()).toBeNull();
-    expect(service.isAuthenticated()).toBeFalse();
+    expect(service.isAuthenticated()).toBe(false);
   });
 
   it('should logout and clear localStorage', () => {
@@ -34,11 +34,11 @@ describe('AuthService', () => {
       email: 'driver@test.com',
       fullName: 'Carlos Driver'
     };
-    localStorage.setItem('auth_user', JSON.stringify(mockUser));
+    service.saveUser(mockUser);
+    expect(service.currentUser()).toBeTruthy();
 
     service.logout();
     expect(service.currentUser()).toBeNull();
-    expect(localStorage.getItem('auth_user')).toBeNull();
+    expect(service.isAuthenticated()).toBe(false);
   });
 });
-

@@ -37,16 +37,18 @@ export class ThemeService {
       ? saved
       : 'system';
 
-    this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (typeof window.matchMedia === 'function') {
+      this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    // Listen for live operating system theme changes in real time
-    this.mediaQuery.addEventListener('change', (e) => {
-      if (this.themePreference() === 'system') {
-        const resolved: ResolvedTheme = e.matches ? 'dark' : 'light';
-        this.updateDocumentTheme(resolved);
-        this.activeTheme.set(resolved);
-      }
-    });
+      // Listen for live operating system theme changes in real time
+      this.mediaQuery.addEventListener?.('change', (e) => {
+        if (this.themePreference() === 'system') {
+          const resolved: ResolvedTheme = e.matches ? 'dark' : 'light';
+          this.updateDocumentTheme(resolved);
+          this.activeTheme.set(resolved);
+        }
+      });
+    }
 
     this.themePreference.set(initialPref);
   }
@@ -75,7 +77,9 @@ export class ThemeService {
     let resolved: ResolvedTheme = 'dark';
 
     if (pref === 'system') {
-      const systemDark = this.mediaQuery ? this.mediaQuery.matches : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const systemDark = this.mediaQuery
+        ? this.mediaQuery.matches
+        : (typeof window.matchMedia === 'function' ? window.matchMedia('(prefers-color-scheme: dark)').matches : true);
       resolved = systemDark ? 'dark' : 'light';
     } else {
       resolved = pref;
