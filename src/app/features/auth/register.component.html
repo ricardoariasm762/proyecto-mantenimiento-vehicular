@@ -1,18 +1,12 @@
 <div class="auth-blueprint-card">
-  <!-- CAD Chamfers -->
-  <span class="cad-corner-tl">┌ ENROLL://02</span>
-  <span class="cad-corner-tr">RBAC-REG ┐</span>
-  <span class="cad-corner-bl">└ SYS-FLEET</span>
-  <span class="cad-corner-br">v4.8 ┘</span>
-
   <div class="auth-header">
     <div class="auth-icon-pod">
       <span class="material-symbols-outlined auth-icon">person_add</span>
     </div>
     <div class="auth-title-cluster">
-      <span class="font-label-sm sys-tag">OPERATOR ENROLLMENT // ACCESS CONTROL</span>
+      <span class="font-label-sm sys-tag">REGISTRO DE USUARIO</span>
       <h2 class="font-headline-md auth-title">ALTA DE OPERADOR Y VEHÍCULO</h2>
-      <p class="font-body-sm auth-sub">Registre su identidad y configure su rol operacional en el ecosistema Veloce.</p>
+      <p class="font-body-sm auth-sub">Registre su cuenta para gestionar vehículos o consultar historiales de taller.</p>
     </div>
   </div>
 
@@ -25,7 +19,7 @@
 
   <!-- Interactive Role Selector -->
   <div class="role-selector-pod">
-    <span class="font-label-sm section-title">SELECCIONE EL ROL OPERACIONAL (RBAC):</span>
+    <span class="font-label-sm section-title">SELECCIONE SU TIPO DE PERFIL:</span>
     <div class="role-buttons-grid">
       <button 
         type="button" 
@@ -36,9 +30,8 @@
           <span class="material-symbols-outlined">directions_car</span>
         </div>
         <div class="role-meta">
-          <span class="font-headline-sm role-name">CONDUCTOR DE FLOTA</span>
-          <span class="font-label-sm role-code">[ROLE_DRIVER]</span>
-          <p class="font-body-sm role-desc">Dictado por voz, registro de odómetro y telemetría de vehículo asignado.</p>
+          <span class="font-headline-sm role-name">CONDUCTOR DE VEHÍCULO</span>
+          <p class="font-body-sm role-desc">Registro de síntomas por voz, odómetro e historial de su vehículo asignado.</p>
         </div>
       </button>
 
@@ -51,9 +44,8 @@
           <span class="material-symbols-outlined">home_repair_service</span>
         </div>
         <div class="role-meta">
-          <span class="font-headline-sm role-name">TALLER MECÁNICO</span>
-          <span class="font-label-sm role-code">[ROLE_MECHANIC]</span>
-          <p class="font-body-sm role-desc">Historial global de todas las placas y emisión de órdenes de servicio.</p>
+          <span class="font-headline-sm role-name">MECÁNICO DE TALLER</span>
+          <p class="font-body-sm role-desc">Acceso global a historiales de cualquier placa y emisión de órdenes de taller.</p>
         </div>
       </button>
     </div>
@@ -74,7 +66,7 @@
             [ngModel]="fullName()" 
             (ngModelChange)="fullName.set($event)"
             name="fullName"
-            placeholder="Ej. Ing. Carlos Mendoza" 
+            placeholder="Ej. Carlos Mendoza" 
             required />
         </div>
       </div>
@@ -97,7 +89,7 @@
 
     <div class="form-row">
       <div class="form-group flex-1">
-        <label class="font-label-sm form-label" for="reg-email">CORREO ELECTRÓNICO (SYS ID)</label>
+        <label class="font-label-sm form-label" for="reg-email">CORREO ELECTRÓNICO</label>
         <div class="input-with-icon">
           <span class="material-symbols-outlined input-icon">mail</span>
           <input 
@@ -107,13 +99,13 @@
             [ngModel]="email()" 
             (ngModelChange)="email.set($event)"
             name="email"
-            placeholder="operador@veloce.com" 
+            placeholder="usuario@veloce.com" 
             required />
         </div>
       </div>
 
       <div class="form-group flex-1">
-        <label class="font-label-sm form-label" for="reg-password">CONTRASEÑA OPERATIVA</label>
+        <label class="font-label-sm form-label" for="reg-password">CONTRASEÑA</label>
         <div class="input-with-icon">
           <span class="material-symbols-outlined input-icon">key</span>
           <input 
@@ -134,13 +126,13 @@
       <div class="vehicle-enrollment-pod">
         <div class="veh-pod-header">
           <span class="material-symbols-outlined icon-amber">garage</span>
-          <span class="font-label-sm veh-title">VINCULAR NUEVO VEHÍCULO ASIGNADO (CHASSIS TELEMETRY)</span>
+          <span class="font-label-sm veh-title">REGISTRAR VEHÍCULO ASIGNADO</span>
         </div>
-        <p class="font-body-sm veh-sub">Los conductores deben tener al menos un vehículo vinculado para registrar síntomas y kilometraje.</p>
+        <p class="font-body-sm veh-sub">Vincule su vehículo para poder diagnosticarlo y guardar su historial.</p>
 
         <div class="form-row">
           <div class="form-group flex-1">
-            <label class="font-label-sm form-label" for="veh-plate">PLACA / MATRÍCULA</label>
+            <label class="font-label-sm form-label" for="veh-plate">PLACA DEL VEHÍCULO</label>
             <input 
               id="veh-plate"
               type="text" 
@@ -152,7 +144,7 @@
           </div>
 
           <div class="form-group flex-1">
-            <label class="font-label-sm form-label" for="veh-brand">MARCA / FABRICANTE</label>
+            <label class="font-label-sm form-label" for="veh-brand">MARCA</label>
             <input 
               id="veh-brand"
               type="text" 
@@ -172,7 +164,7 @@
               [ngModel]="model()" 
               (ngModelChange)="model.set($event)"
               name="model"
-              placeholder="Hilux Turbo" />
+              placeholder="Hilux" />
           </div>
         </div>
 
@@ -190,7 +182,7 @@
           </div>
 
           <div class="form-group flex-1">
-            <label class="font-label-sm form-label" for="veh-mileage">KILOMETRAJE BASE (KM)</label>
+            <label class="font-label-sm form-label" for="veh-mileage">KILOMETRAJE ACTUAL (KM)</label>
             <input 
               id="veh-mileage"
               type="number" 
@@ -211,16 +203,16 @@
         [disabled]="isLoading()">
         @if (isLoading()) {
           <div class="spinner"></div>
-          <span>CONFIRMANDO REGISTRO EN BASE DE DATOS...</span>
+          <span>CREANDO CUENTA...</span>
         } @else {
           <span class="material-symbols-outlined">check_circle</span>
-          <span>COMPLETAR REGISTRO DE CUENTA</span>
+          <span>COMPLETAR REGISTRO</span>
         }
       </button>
     </div>
 
     <div class="auth-footer-links">
-      <span class="font-body-sm">¿Ya posee una cuenta registrada en el sistema?</span>
+      <span class="font-body-sm">¿Ya posee una cuenta registrada?</span>
       <button type="button" class="link-btn font-label-md" (click)="onGoToLogin()">
         <span>← VOLVER AL INICIO DE SESIÓN</span>
       </button>
@@ -228,4 +220,3 @@
 
   </form>
 </div>
-

@@ -1,18 +1,12 @@
 <div class="auth-blueprint-card">
-  <!-- CAD Chamfers -->
-  <span class="cad-corner-tl">┌ AUTH://01</span>
-  <span class="cad-corner-tr">0x7F ┐</span>
-  <span class="cad-corner-bl">└ SEC-RBAC</span>
-  <span class="cad-corner-br">JWT ┘</span>
-
   <div class="auth-header">
     <div class="auth-icon-pod">
       <span class="material-symbols-outlined auth-icon">lock_open</span>
     </div>
     <div class="auth-title-cluster">
-      <span class="font-label-sm sys-tag">SECURITY CLEARANCE // JWT RBAC</span>
+      <span class="font-label-sm sys-tag">AUTENTICACIÓN DE USUARIOS</span>
       <h2 class="font-headline-md auth-title">CONTROL DE ACCESO VELOCE</h2>
-      <p class="font-body-sm auth-sub">Ingrese sus credenciales de operador para habilitar telemetría y diagnósticos.</p>
+      <p class="font-body-sm auth-sub">Ingrese sus credenciales para habilitar diagnósticos y gestión vehicular.</p>
     </div>
   </div>
 
@@ -25,7 +19,7 @@
 
   <!-- Quick Demo Access Cluster -->
   <div class="demo-presets-cluster">
-    <span class="font-label-sm demo-label">ACCESO RÁPIDO DEMO:</span>
+    <span class="font-label-sm demo-label">ACCESO RÁPIDO DE PRUEBA:</span>
     <div class="demo-buttons-row">
       <button 
         type="button" 
@@ -49,7 +43,7 @@
   <form class="auth-form" (ngSubmit)="onLogin()">
     <div class="form-group">
       <label class="font-label-sm form-label" for="login-email">
-        <span>CORREO ELECTRÓNICO (SYS ID)</span>
+        <span>CORREO ELECTRÓNICO</span>
       </label>
       <div class="input-with-icon">
         <span class="material-symbols-outlined input-icon">mail</span>
@@ -60,7 +54,7 @@
           [ngModel]="email()" 
           (ngModelChange)="email.set($event)"
           name="email"
-          placeholder="operador@veloce.com" 
+          placeholder="usuario@veloce.com" 
           required 
           autocomplete="email" />
       </div>
@@ -68,7 +62,7 @@
 
     <div class="form-group">
       <label class="font-label-sm form-label" for="login-password">
-        <span>CONTRASEÑA OPERACIONAL</span>
+        <span>CONTRASEÑA</span>
       </label>
       <div class="input-with-icon">
         <span class="material-symbols-outlined input-icon">key</span>
@@ -92,20 +86,20 @@
         [disabled]="isLoading()">
         @if (isLoading()) {
           <div class="spinner"></div>
-          <span>AUTENTICANDO TOKEN JWT...</span>
+          <span>VERIFICANDO CREDENCIALES...</span>
         } @else {
           <span class="material-symbols-outlined">login</span>
-          <span>INICIAR SESIÓN SEGURA</span>
+          <span>INICIAR SESIÓN</span>
         }
       </button>
     </div>
 
     <div class="auth-footer-links">
-      <span class="font-body-sm">¿No tiene credenciales de flota o desea registrar su vehículo?</span>
+      <span class="font-body-sm">¿No tiene una cuenta creada?</span>
       <button type="button" class="link-btn font-label-md" (click)="onGoToRegister()">
-        <span>REGISTRARSE / REGISTRAR NUEVO VEHÍCULO →</span>
+        <span>REGISTRAR NUEVO OPERADOR O VEHÍCULO →</span>
       </button>
     </div>
+
   </form>
 </div>
-

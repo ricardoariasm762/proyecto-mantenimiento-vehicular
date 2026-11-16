@@ -218,7 +218,7 @@ export class App implements OnInit, OnDestroy {
       if (user.defaultLicensePlate) {
         this.licensePlate.set(user.defaultLicensePlate);
       }
-      this.showNotification(`Sesión iniciada correctamente: ${user.fullName || user.email} [${user.role}]`);
+      this.showNotification(`Sesión iniciada correctamente: ${user.fullName || user.email} (${this.authService.userRoleLabel()})`);
       this.loadHistory(this.licensePlate());
     }
   }
@@ -525,6 +525,16 @@ export class App implements OnInit, OnDestroy {
         return;
       }
       this.loadHistory(this.authService.isMechanic() ? '' : this.licensePlate());
+    }
+
+    // Desplazamiento suave directo hacia la sección seleccionada
+    if (typeof document !== 'undefined') {
+      setTimeout(() => {
+        const targetElement = document.getElementById(nav);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 50);
     }
   }
 }

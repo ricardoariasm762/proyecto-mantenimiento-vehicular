@@ -19,7 +19,7 @@
             <span class="font-label-sm brand-ver">v4.8</span>
           </div>
           <div class="font-label-sm brand-sub">
-            <span class="sys-prefix">SYS://</span>VEHICLE-TELEMETRY/PREDICTIVE-AI
+            <span class="sys-prefix">SISTEMA</span> // PREDICTIVO DE MANTENIMIENTO
           </div>
         </div>
       </div>
@@ -100,7 +100,7 @@
         <!-- CAN-Bus Status -->
         <div class="can-bus-status">
           <span class="pulse-beacon"></span>
-          <span class="font-label-sm can-bus-text">CAN-BUS 2.0 CONNECTED [500 kbps]</span>
+          <span class="font-label-sm can-bus-text">CAN-BUS CONECTADO [500 kbps]</span>
         </div>
 
         <!-- Atomic Real-Time UTC Clock -->
@@ -116,9 +116,9 @@
               <span class="font-label-sm op-name">{{ authService.userFullName() }}</span>
               <div class="op-sub-row">
                 <span class="font-label-sm op-role" [class.text-amber]="authService.isDriver()" [class.text-cyan]="authService.isMechanic()">
-                  [{{ authService.userRoleLabel() }}]
+                  {{ authService.userRoleLabel() }}
                 </span>
-                <span class="font-label-sm op-plate">VIN: {{ licensePlate() }}</span>
+                <span class="font-label-sm op-plate">Placa: {{ licensePlate() }}</span>
               </div>
             </div>
             <div class="operator-avatar" [class.avatar-driver]="authService.isDriver()" [class.avatar-mechanic]="authService.isMechanic()">
@@ -126,20 +126,22 @@
                 {{ authService.isMechanic() ? 'engineering' : 'directions_car' }}
               </span>
             </div>
-            <button 
-              type="button" 
-              class="cad-header-logout-btn font-label-sm" 
-              (click)="logout()" 
-              title="Cerrar sesión actual">
-              <span class="material-symbols-outlined">logout</span>
-              <span>SALIR</span>
-            </button>
           </div>
+
+          <!-- Botón de Cerrar Sesión prominente y claramente visible -->
+          <button 
+            type="button" 
+            class="cad-header-logout-btn" 
+            (click)="logout()" 
+            title="Cerrar sesión actual del sistema">
+            <span class="material-symbols-outlined">logout</span>
+            <span>CERRAR SESIÓN</span>
+          </button>
         } @else {
           <div class="operator-guest-pod">
             <div class="guest-meta">
-              <span class="font-label-sm guest-tag">OPERADOR NO AUTENTICADO</span>
-              <span class="font-label-sm guest-sub">MODO INVITADO [RBAC INACTIVO]</span>
+              <span class="font-label-sm guest-tag">MODO INVITADO</span>
+              <span class="font-label-sm guest-sub">SIN SESIÓN ACTIVA</span>
             </div>
             <div class="guest-actions">
               <button 
@@ -147,14 +149,14 @@
                 class="cad-btn-primary btn-header-login" 
                 (click)="openAuthModal('login')">
                 <span class="material-symbols-outlined">login</span>
-                <span>ACCEDER</span>
+                <span>INICIAR SESIÓN</span>
               </button>
               <button 
                 type="button" 
                 class="cad-btn-secondary btn-header-reg" 
                 (click)="openAuthModal('register')">
                 <span class="material-symbols-outlined">person_add</span>
-                <span>REGISTRO</span>
+                <span>REGISTRARSE</span>
               </button>
             </div>
           </div>
@@ -187,20 +189,20 @@
       }
 
       <!-- ==================== 2. TOP OPERATIONAL BAR & CHASSIS TELEMETRY ==================== -->
-      <section class="cad-panel operational-header-bar">
+      <section class="cad-panel operational-header-bar" id="configuracion-sensorica">
         <div class="accent-top-line"></div>
         
         <div class="op-header-left">
           <div class="op-indicator-bar"></div>
           <div>
             <div class="font-label-sm op-platform-tag">
-              <span>PLATFORM ARCHITECTURE [VX-840]</span>
+              <span>MONITOREO TELEMÉTRICO Y PREDICTIVO</span>
               <span class="slash">/</span>
-              <span>ORBITAL TELEMETRY</span>
+              <span>TELEMETRÍA EN TIEMPO REAL</span>
             </div>
             <h1 class="font-headline-md op-vehicle-title">
               2024 APEX GT-PRO TWIN-TURBO V8 
-              <span class="vin-tag">// VIN: WBA-849204-{{ licensePlate() }}</span>
+              <span class="vin-tag">// Placa: {{ licensePlate() }}</span>
             </h1>
           </div>
         </div>
@@ -209,44 +211,44 @@
         <div class="op-badges-group font-label-md">
           <div class="op-badge badge-firmware">
             <span class="badge-dot cyan"></span>
-            <span>ECU FIRMWARE:</span>
-            <strong class="highlight">v9.42-REV3</strong>
+            <span>CENTRALITA ECU:</span>
+            <strong class="highlight">Conectada</strong>
           </div>
           <div class="op-badge badge-dtc">
             <span class="badge-dot orange ping"></span>
-            <span class="dtc-label">ACTIVE DTC:</span>
+            <span class="dtc-label">CÓDIGO OBD-II:</span>
             <strong class="highlight-orange">{{ currentDtc() }}</strong>
           </div>
           <div class="op-badge badge-mode">
             <span class="material-symbols-outlined badge-icon">psychology</span>
-            <span>MODE:</span>
-            <strong class="highlight">DYNAMIC REAL-TIME NLP</strong>
+            <span>MODO:</span>
+            <strong class="highlight">ANÁLISIS DE SÍNTOMAS IA</strong>
           </div>
           <div class="op-badge badge-frame">
-            <span>FRAME:</span>
-            <strong class="highlight-cyan">#98,204</strong>
+            <span>TELEMETRÍA:</span>
+            <strong class="highlight-cyan">EN LÍNEA</strong>
           </div>
         </div>
       </section>
 
       <!-- ==================== 3. CENTRAL INTERACTIVE CAD CHASSIS MAP ==================== -->
-      <section class="cad-panel-lowest cad-chassis-section">
+      <section class="cad-panel-lowest cad-chassis-section" id="despiece-tecnico-cad">
         
         <!-- Corner Coordinates & Datum Labels -->
-        <span class="cad-corner-tl">+ CORNER [0,0]</span>
-        <span class="cad-corner-tr">DIM 4980x1990mm +</span>
-        <span class="cad-corner-bl">+ DATUM: AXLE-C</span>
-        <span class="cad-corner-br">SCALE 1:25 ISO +</span>
+        <span class="cad-corner-tl">+ VISTA SUPERIOR DEL CHASIS +</span>
+        <span class="cad-corner-tr">DIM 4980x1990 mm +</span>
+        <span class="cad-corner-bl">+ EJE DELANTERO / TRASERO +</span>
+        <span class="cad-corner-br">ESCALA 1:25 +</span>
 
         <!-- CAD Control Ribbon -->
         <div class="cad-ribbon">
           <div class="ribbon-left">
             <span class="cad-view-tag">
               <span class="material-symbols-outlined tag-icon">view_in_ar</span>
-              ORTHO CAD VIEW 01
+              VISTA TÉCNICA DEL CHASIS
             </span>
             <span class="font-label-sm calib-tag">
-              CALIBRATED: ±0.02 mm
+              COMPONENTES INTERACTIVOS
             </span>
           </div>
 
@@ -257,21 +259,21 @@
               class="layer-btn" 
               [class.active]="activeLayer() === 'wireframe'"
               (click)="selectLayer('wireframe')">
-              WIREFRAME
+              ESTRUCTURA
             </button>
             <button 
               type="button"
               class="layer-btn" 
               [class.active]="activeLayer() === 'thermal'"
               (click)="selectLayer('thermal')">
-              THERMAL SENSORS
+              SENSORES TÉRMICOS
             </button>
             <button 
               type="button"
               class="layer-btn" 
               [class.active]="activeLayer() === 'kinematics'"
               (click)="selectLayer('kinematics')">
-              DRIVETRAIN X-RAY
+              TREN MOTRIZ
             </button>
             <button 
               type="button"
@@ -412,10 +414,10 @@
               <!-- Callout Box -->
               <rect x="475" y="105" width="230" height="66" rx="4" fill="var(--color-surface-container-lowest)" fill-opacity="0.95" stroke="var(--color-secondary-container)" stroke-width="1.5"/>
               <rect x="475" y="105" width="4" height="66" fill="var(--color-secondary-container)"/>
-              <text x="488" y="122" font-family="JetBrains Mono" font-size="10" font-weight="700" fill="var(--color-secondary)">CRITICAL SYMPTOM DETECTED</text>
-              <text x="488" y="138" font-family="Hanken Grotesk" font-size="10" fill="var(--color-on-surface)">Slip / High Vibration @ 60-80 km/h</text>
-              <text x="488" y="152" font-family="JetBrains Mono" font-size="9" fill="var(--color-secondary)">TEMP: 98°C | FLUID SHEAR: HIGH</text>
-              <text x="488" y="164" font-family="JetBrains Mono" font-size="8" fill="var(--color-on-surface-variant)">DTC P0741 // TORQUE CONV LOCKUP</text>
+              <text x="488" y="122" font-family="JetBrains Mono" font-size="10" font-weight="700" fill="var(--color-secondary)">FALLA CRÍTICA DETECTADA</text>
+              <text x="488" y="138" font-family="Hanken Grotesk" font-size="10" fill="var(--color-on-surface)">Deslizamiento y vibración a >60 km/h</text>
+              <text x="488" y="152" font-family="JetBrains Mono" font-size="9" fill="var(--color-secondary)">Temperatura: 98°C | Desgaste: Alto</text>
+              <text x="488" y="164" font-family="JetBrains Mono" font-size="8" fill="var(--color-on-surface-variant)">Código P0741 // Convertidor de par</text>
             </g>
 
             <!-- 2. ENGINE CORE HOTSPOT (CYAN) -->
@@ -423,9 +425,9 @@
               <circle cx="305" cy="250" r="6" fill="var(--color-primary)" filter="url(#cadCyanGlow)"/>
               <polyline points="305,210 305,170 230,170" fill="none" stroke="var(--color-primary)" stroke-width="1"/>
               <rect x="75" y="148" width="150" height="42" rx="3" fill="var(--color-surface-container-lowest)" stroke="var(--color-primary)" stroke-opacity="0.5" stroke-width="1"/>
-              <text x="83" y="163" font-family="JetBrains Mono" font-size="9" font-weight="700" fill="var(--color-primary)">ENGINE CORE // TWIN TURBO</text>
-              <text x="83" y="176" font-family="JetBrains Mono" font-size="8.5" fill="var(--color-on-surface)">BOOST: 1.42 bar | AFR: 14.7</text>
-              <text x="83" y="185" font-family="JetBrains Mono" font-size="7.5" fill="var(--color-on-surface-variant)">OIL P: 4.8 BAR [OPTIMAL]</text>
+              <text x="83" y="163" font-family="JetBrains Mono" font-size="9" font-weight="700" fill="var(--color-primary)">MOTOR PRINCIPAL // BITURBO</text>
+              <text x="83" y="176" font-family="JetBrains Mono" font-size="8.5" fill="var(--color-on-surface)">Presión: 1.42 bar | Mezcla: 14.7</text>
+              <text x="83" y="185" font-family="JetBrains Mono" font-size="7.5" fill="var(--color-on-surface-variant)">Presión de aceite: 4.8 bar (Óptima)</text>
             </g>
 
             <!-- 3. BRAKING ASSEMBLY HOTSPOT (CYAN) -->
@@ -433,8 +435,8 @@
               <circle cx="265" cy="100" r="5" fill="var(--color-primary)"/>
               <polyline points="265,80 265,58 335,58" fill="none" stroke="var(--color-primary)" stroke-width="1"/>
               <rect x="340" y="44" width="145" height="32" rx="3" fill="var(--color-surface-container-lowest)" stroke="var(--color-primary)" stroke-opacity="0.4" stroke-width="1"/>
-              <text x="347" y="58" font-family="JetBrains Mono" font-size="8.5" font-weight="700" fill="var(--color-primary)">BRAKING ASSEMBLY [FL]</text>
-              <text x="347" y="70" font-family="JetBrains Mono" font-size="8" fill="var(--color-on-surface)">PADS: 78% | ROTOR: 42°C</text>
+              <text x="347" y="58" font-family="JetBrains Mono" font-size="8.5" font-weight="700" fill="var(--color-primary)">SISTEMA DE FRENOS</text>
+              <text x="347" y="70" font-family="JetBrains Mono" font-size="8" fill="var(--color-on-surface)">Pastillas: 78% | Disco: 42°C</text>
             </g>
 
             <!-- 4. SUSPENSION ARMS (CYAN) -->
@@ -442,8 +444,8 @@
               <circle cx="280" cy="360" r="5" fill="var(--color-primary)"/>
               <polyline points="280,360 280,410 340,410" fill="none" stroke="var(--color-primary)" stroke-width="1"/>
               <rect x="345" y="396" width="155" height="32" rx="3" fill="var(--color-surface-container-lowest)" stroke="var(--color-primary)" stroke-opacity="0.4" stroke-width="1"/>
-              <text x="352" y="410" font-family="JetBrains Mono" font-size="8.5" font-weight="700" fill="var(--color-primary)">ACTIVE DAMPING ARM</text>
-              <text x="352" y="422" font-family="JetBrains Mono" font-size="8" fill="var(--color-on-surface)">FREQ: 14Hz | INTEGRITY: 91%</text>
+              <text x="352" y="410" font-family="JetBrains Mono" font-size="8.5" font-weight="700" fill="var(--color-primary)">BRAZO DE SUSPENSIÓN</text>
+              <text x="352" y="422" font-family="JetBrains Mono" font-size="8" fill="var(--color-on-surface)">Frecuencia: 14Hz | Integridad: 91%</text>
             </g>
 
             <!-- 5. ELECTRICAL HARNESS & CAN BUS (CYAN) -->
@@ -451,8 +453,8 @@
               <circle cx="650" cy="160" r="5" fill="var(--color-primary)"/>
               <polyline points="650,160 690,160 710,195" fill="none" stroke="var(--color-primary)" stroke-width="1"/>
               <rect x="715" y="180" width="160" height="34" rx="3" fill="var(--color-surface-container-lowest)" stroke="var(--color-primary)" stroke-opacity="0.4" stroke-width="1"/>
-              <text x="722" y="194" font-family="JetBrains Mono" font-size="8.5" font-weight="700" fill="var(--color-primary)">CAN-BUS 2.0 HARNESS</text>
-              <text x="722" y="207" font-family="JetBrains Mono" font-size="8" fill="var(--color-on-surface)">LOAD: 44% | 14.2V [NO FAULTS]</text>
+              <text x="722" y="194" font-family="JetBrains Mono" font-size="8.5" font-weight="700" fill="var(--color-primary)">RED CAN-BUS 2.0</text>
+              <text x="722" y="207" font-family="JetBrains Mono" font-size="8" fill="var(--color-on-surface)">Carga: 44% | Batería: 14.2V (Normal)</text>
             </g>
 
           </svg>
@@ -460,11 +462,11 @@
           <!-- Floating HUD Overlay inside Blueprint -->
           <div class="cad-hud-floating-pill">
             <span class="hud-dot"></span>
-            <span>VECTOR ZOOM: 100%</span>
+            <span>VISTA ORTOGONAL</span>
             <span class="sep">•</span>
-            <span>PROJECTION: ORTHOGRAPHIC 2D</span>
+            <span>COMPONENTES ACTIVOS</span>
             <span class="sep">•</span>
-            <span class="hud-alert">1 ALERT IDENTIFIED</span>
+            <span class="hud-alert">1 ALERTA DETECTADA</span>
           </div>
 
         </div>
@@ -472,24 +474,24 @@
       </section>
 
       <!-- ==================== 4. MULTIMODAL ACOUSTIC & NLP CAPSULE ==================== -->
-      <section class="cad-grid-dual">
+      <section class="cad-grid-dual" id="diagnostico-predictivo">
         
         <!-- Voice Capsule & Reactive Oscilloscope (7 Cols) -->
         <div class="cad-panel voice-capsule-card">
           <div class="capsule-header">
             <div class="capsule-title-group">
               <span class="material-symbols-outlined icon-cyan">graphic_eq</span>
-              <h2 class="font-headline-sm capsule-title">MULTIMODAL ACOUSTIC SYMPTOM INGESTION</h2>
+              <h2 class="font-headline-sm capsule-title">CAPTURA Y ANÁLISIS DE SÍNTOMAS</h2>
             </div>
             @if (voiceService.isListening()) {
               <div class="listening-live-tag">
                 <span class="pulse-red-dot"></span>
-                <span>LISTENING TO ENGINE NOISE DESCRIPTION...</span>
+                <span>Escuchando descripción de la falla...</span>
               </div>
             } @else {
               <div class="ready-tag">
                 <span class="dot-cyan"></span>
-                <span>WEB SPEECH API ACTIVE (es-CO)</span>
+                <span>Micrófono listo para dictado</span>
               </div>
             }
           </div>
@@ -521,15 +523,15 @@
             <!-- Audio Spec Readout -->
             <div class="audio-spec-meta">
               <span class="font-label-sm audio-freq">48.0 kHz</span>
-              <span class="font-label-sm audio-bits">24-BIT PCM</span>
+              <span class="font-label-sm audio-bits">AUDIO EN VIVO</span>
             </div>
           </div>
 
           <!-- Live NLP Transcription Feed -->
           <div class="cad-panel-inset nlp-transcription-box">
             <div class="nlp-header-line font-label-sm">
-              <span class="label">LIVE NLP TRANSCRIPTION FEED:</span>
-              <span class="confidence-val">CONFIDENCE: 96.4%</span>
+              <span class="label">DESCRIPCIÓN DEL SÍNTOMA REPORTADO:</span>
+              <span class="confidence-val">RECONOCIMIENTO ACTIVO</span>
             </div>
             <textarea 
               rows="3" 
@@ -542,7 +544,7 @@
 
           <!-- Quick Presets Selector Chips -->
           <div class="cad-presets-row">
-            <span class="font-label-sm preset-tag-label">TELEMETRY PRESETS:</span>
+            <span class="font-label-sm preset-tag-label">EJEMPLOS DE FALLAS COMUNES:</span>
             <div class="preset-chips-list">
               <button type="button" class="preset-chip" (click)="loadPreset('transmision')">
                 <span class="chip-dot trans"></span> Transmisión
@@ -569,15 +571,15 @@
           <div class="capsule-actions-row">
             <button type="button" class="cad-btn-primary" (click)="toggleVoiceRecognition()">
               <span class="material-symbols-outlined">refresh</span>
-              {{ voiceService.isListening() ? 'STOP RECORDING' : 'RECORD VOICE SYMPTOM' }}
+              {{ voiceService.isListening() ? 'DETENER GRABACIÓN' : 'DICTAR SÍNTOMA POR VOZ' }}
             </button>
-            <button type="button" class="cad-btn-secondary" (click)="showNotification('Archivo de audio .WAV cargado para espectrograma.')">
+            <button type="button" class="cad-btn-secondary" (click)="showNotification('Archivo de audio cargado para análisis.')">
               <span class="material-symbols-outlined">upload_file</span>
-              UPLOAD TELEMETRY .WAV
+              CARGAR AUDIO
             </button>
-            <button type="button" class="cad-btn-secondary" (click)="showNotification('Entidad semántica validada por motor NLP.')">
+            <button type="button" class="cad-btn-secondary" (click)="showNotification('Entidad del síntoma validada.')">
               <span class="material-symbols-outlined">check_circle</span>
-              VALIDATE NLP ENTITY
+              VALIDAR SÍNTOMA
             </button>
           </div>
 
@@ -589,34 +591,34 @@
             <div class="nlp-card-header">
               <span class="font-headline-sm nlp-title">
                 <span class="material-symbols-outlined icon-orange">bubble_chart</span>
-                NLP EXTRACTED METADATA
+                METADATOS DEL DIAGNÓSTICO
               </span>
-              <span class="font-label-sm lex-engine-tag">LEXICAL ENGINE v3.1</span>
+              <span class="font-label-sm lex-engine-tag">MOTOR DE IA PREDICTIVO</span>
             </div>
 
             <!-- Structured Semantic Badges Grid -->
             <div class="semantic-badges-grid">
               
               <div class="semantic-badge-box">
-                <span class="font-label-sm badge-sub">IDENTIFIED SUBSYSTEM</span>
+                <span class="font-label-sm badge-sub">SISTEMA IDENTIFICADO</span>
                 <span class="font-label-md badge-val text-secondary">{{ currentSubsystem() }}</span>
               </div>
 
               <div class="semantic-badge-box">
-                <span class="font-label-sm badge-sub">SEVERITY LEVEL</span>
+                <span class="font-label-sm badge-sub">NIVEL DE GRAVEDAD</span>
                 <span class="font-label-md badge-val text-orange">
                   <span class="mini-dot orange"></span>
-                  {{ currentResult()?.riskLevel || 'MODERATE 2/3 (ACTION)' }}
+                  {{ currentResult()?.riskLevel || 'MODERADO 2/3 (ACCIÓN)' }}
                 </span>
               </div>
 
               <div class="semantic-badge-box">
-                <span class="font-label-sm badge-sub">ACOUSTIC FREQUENCY</span>
-                <span class="font-label-md badge-val text-cyan">140 Hz HARMONIC RATTLE</span>
+                <span class="font-label-sm badge-sub">PATRÓN DETECTADO</span>
+                <span class="font-label-md badge-val text-cyan">Vibración acústica anómala</span>
               </div>
 
               <div class="semantic-badge-box">
-                <span class="font-label-sm badge-sub">CAN CORRELATED DTC</span>
+                <span class="font-label-sm badge-sub">CÓDIGO OBD-II ASOCIADO</span>
                 <span class="font-label-md badge-val text-secondary-dim">{{ currentDtc() }}</span>
               </div>
 
@@ -626,8 +628,8 @@
           <!-- Mini Mechanical Telemetry Tickers -->
           <div class="cad-panel-inset fluid-shear-card">
             <div class="shear-header font-label-sm">
-              <span>LIVE FLUID SHEAR INDEX</span>
-              <span class="shear-threshold">68% WEAR THRESHOLD</span>
+              <span>ESTADO DE FLUIDO Y DESGASTE</span>
+              <span class="shear-threshold">ALERTA DE DESGASTE</span>
             </div>
             
             <div class="shear-track">
@@ -635,9 +637,9 @@
             </div>
 
             <div class="shear-footer font-label-sm">
-              <span>NOMINAL: &lt;30%</span>
-              <span>CURRENT SLIP: +140 RPM</span>
-              <span class="text-orange">CRITICAL: &gt;75%</span>
+              <span>Normal: &lt;30%</span>
+              <span>Deslizamiento: +140 RPM</span>
+              <span class="text-orange">Crítico: &gt;75%</span>
             </div>
           </div>
 
@@ -646,14 +648,14 @@
       </section>
 
       <!-- ==================== 5. QUANTITATIVE TELEMETRY SLIDERS ==================== -->
-      <section class="cad-panel sliders-section">
+      <section class="cad-panel sliders-section" id="flujo-telemetria-can">
         
         <div class="sliders-header">
           <div class="sliders-title-group">
             <span class="material-symbols-outlined icon-cyan">tune</span>
-            <h2 class="font-headline-sm sliders-title">QUANTITATIVE ODOMETER &amp; KINEMATIC THRESHOLDS</h2>
+            <h2 class="font-headline-sm sliders-title">PARÁMETROS OPERACIONALES Y KILOMETRAJE</h2>
           </div>
-          <span class="font-label-sm sliders-sub">HIGH-PRECISION SENSOR FEED // CONTINUOUS CALIBRATION</span>
+          <span class="font-label-sm sliders-sub">Calibración de kilometraje y consumo relativo del vehículo</span>
         </div>
 
         <div class="sliders-grid">
@@ -661,8 +663,8 @@
           <!-- Slider 1: Total Mileage -->
           <div class="cad-panel-inset slider-card">
             <div class="slider-top font-label-sm">
-              <span class="slider-sub">TOTAL FLEET MILEAGE</span>
-              <span class="slider-status-cyan">STATUS: LOGGED</span>
+              <span class="slider-sub">KILOMETRAJE TOTAL DEL VEHÍCULO</span>
+              <span class="slider-status-cyan">ESTADO: REGISTRADO</span>
             </div>
             <div class="slider-val-row">
               <span class="font-headline-lg val-num">{{ mileageKm() | number }}</span>
@@ -691,13 +693,13 @@
           <!-- Slider 2: Delta KM Since Last Service -->
           <div class="cad-panel-inset slider-card">
             <div class="slider-top font-label-sm">
-              <span class="slider-sub">DELTA SINCE LAST SERVICE</span>
-              <span class="slider-status-orange">LIMIT: 10,000 KM</span>
+              <span class="slider-sub">KILÓMETROS DESDE EL ÚLTIMO MANTENIMIENTO</span>
+              <span class="slider-status-orange">LÍMITE: 10,000 KM</span>
             </div>
             <div class="slider-val-row">
               <span class="font-headline-lg val-num text-orange">{{ kmSinceLastService() | number }}</span>
               <span class="font-label-lg val-unit">KM</span>
-              <span class="font-label-sm service-used-badge">{{ servicePercent() }}% USED</span>
+              <span class="font-label-sm service-used-badge">{{ servicePercent() }}% DEL INTERVALO</span>
             </div>
             <div class="slider-bar-wrap">
               <div class="cad-track">
@@ -712,8 +714,8 @@
                 [ngModel]="kmSinceLastService()" 
                 (ngModelChange)="kmSinceLastService.set($event)"/>
               <div class="slider-ticks font-label-sm">
-                <span>SERVICE INTERVAL</span>
-                <span class="text-orange">{{ 10000 - kmSinceLastService() > 0 ? (10000 - kmSinceLastService()) + ' KM REMAINING' : 'SERVICE OVERDUE' }}</span>
+                <span>INTERVALO DE SERVICIO</span>
+                <span class="text-orange">{{ 10000 - kmSinceLastService() > 0 ? (10000 - kmSinceLastService()) + ' KM RESTANTES' : 'MANTENIMIENTO VENCIDO' }}</span>
               </div>
             </div>
           </div>
@@ -721,12 +723,12 @@
           <!-- Slider 3: Fuel Consumption Delta -->
           <div class="cad-panel-inset slider-card">
             <div class="slider-top font-label-sm">
-              <span class="slider-sub">FUEL CONSUMPTION DELTA</span>
-              <span class="slider-status-orange">PARASITIC DRAG</span>
+              <span class="slider-sub">VARIACIÓN EN EL CONSUMO DE COMBUSTIBLE</span>
+              <span class="slider-status-orange">SOBRECONSUMO</span>
             </div>
             <div class="slider-val-row">
               <span class="font-headline-lg val-num text-secondary">{{ fuelDeltaDisplay() }}</span>
-              <span class="font-label-sm val-unit-sub">VS BASELINE ({{ fuelConsumptionRatio() | number:'1.2-2' }}x)</span>
+              <span class="font-label-sm val-unit-sub">Respecto al consumo normal ({{ fuelConsumptionRatio() | number:'1.2-2' }}x)</span>
             </div>
             <div class="slider-bar-wrap">
               <div class="cad-track relative">
@@ -742,8 +744,8 @@
                 [ngModel]="fuelConsumptionRatio()" 
                 (ngModelChange)="fuelConsumptionRatio.set($event)"/>
               <div class="slider-ticks font-label-sm">
-                <span>NOMINAL [1.00]</span>
-                <span class="text-orange">SLIP INDUCED LOSS</span>
+                <span>Consumo normal [1.00x]</span>
+                <span class="text-orange">Pérdida por fricción/falla</span>
               </div>
             </div>
           </div>
@@ -753,7 +755,7 @@
         <!-- Vehicle Plate & Main Actuator Bar -->
         <div class="actuator-bar">
           <div class="plate-input-cluster">
-            <label for="plateInput" class="font-label-sm plate-label">CHASSIS / VEHICLE LICENSE PLATE:</label>
+            <label for="plateInput" class="font-label-sm plate-label">PLACA DEL VEHÍCULO A EVALUAR:</label>
             <div class="plate-input-wrap">
               <span class="material-symbols-outlined input-icon">pin</span>
               <input 
@@ -774,7 +776,7 @@
             (click)="onDiagnosticSubmit()">
             @if (isSubmitting()) {
               <div class="spinner"></div>
-              <span>PROCESANDO INFERENCIA ONNX &amp; NLP...</span>
+              <span>PROCESANDO DIAGNÓSTICO IA...</span>
             } @else {
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="8"/>
@@ -799,9 +801,9 @@
             <div class="dial-header">
               <span class="font-headline-sm dial-title">
                 <span class="material-symbols-outlined icon-cyan">smart_toy</span>
-                AI PROGNOSTIC CERTAINTY
+                CERTEZA DEL DIAGNÓSTICO IA
               </span>
-              <span class="font-label-sm asil-tag">ISO-26262 ASIL-B</span>
+              <span class="font-label-sm asil-tag">NORMATIVA AUTOMOTRIZ</span>
             </div>
 
             <!-- Skeuomorphic Arc Dial -->
@@ -819,20 +821,20 @@
                 </svg>
                 <div class="dial-center-pod">
                   <span class="font-headline-lg dial-pct">{{ currentResult()?.confidencePercentage | number:'1.0-1' }}%</span>
-                  <span class="font-label-sm dial-label">CONFIDENCE</span>
-                  <span class="font-label-sm dial-algo">ALGO: V4-XGB</span>
+                  <span class="font-label-sm dial-label">CONFIANZA</span>
+                  <span class="font-label-sm dial-algo">MODELO PREDICTIVO</span>
                 </div>
               </div>
 
               <!-- Root Cause Details -->
               <div class="root-cause-box">
-                <span class="font-label-sm root-cause-tag">ROOT CAUSE DETERMINATION</span>
+                <span class="font-label-sm root-cause-tag">FALLA DETECTADA POR EL SISTEMA</span>
                 <p class="font-body-md root-cause-desc">
                   {{ currentResult()?.primaryFault }}
                 </p>
                 <div class="font-label-sm fleet-match">
                   <span class="material-symbols-outlined">history</span>
-                  <span>MATCHES 42 HISTORICAL FLEET RECORDS</span>
+                  <span>Coincide con registros previos de la flota</span>
                 </div>
               </div>
             </div>
@@ -851,9 +853,9 @@
             <div class="protocol-header">
               <span class="font-headline-sm protocol-title">
                 <span class="material-symbols-outlined icon-orange">task_alt</span>
-                PRESCRIPTIVE ACTION PROTOCOL
+                ACCIONES RECOMENDADAS DE MANTENIMIENTO
               </span>
-              <span class="font-label-sm req-tag">3 ACTIONS REQUIRED</span>
+              <span class="font-label-sm req-tag">PASOS A SEGUIR</span>
             </div>
 
             <!-- Structured Action Items List -->
@@ -863,17 +865,17 @@
               <div class="action-item-card critical-action">
                 <div class="action-info">
                   <div class="action-badge-row font-label-sm">
-                    <span class="action-pill pill-critical">CRITICAL</span>
-                    <span class="action-priority">PRIORITY 1</span>
+                    <span class="action-pill pill-critical">CRÍTICO</span>
+                    <span class="action-priority">PRIORIDAD 1</span>
                   </div>
                   <h3 class="font-body-md action-text">
-                    {{ currentResult()?.recommendedAction || 'Schedule torque converter inspection & fluid flush within 400 km' }}
+                    {{ currentResult()?.recommendedAction || 'Programar inspección de convertidor de par y lavado de fluido dentro de 400 km.' }}
                   </h3>
-                  <span class="font-label-sm action-sub">Prevents complete transmission lockup friction failure</span>
+                  <span class="font-label-sm action-sub">Previene desgaste prematuro y fallas mayores en carretera</span>
                 </div>
                 <button type="button" class="cad-btn-action" (click)="handlePrescriptiveAction('schedule')">
                   <span class="material-symbols-outlined">calendar_add_on</span>
-                  SCHEDULE SERVICE
+                  AGENDAR MANTENIMIENTO
                 </button>
               </div>
 
@@ -881,17 +883,17 @@
               <div class="action-item-card secondary-action">
                 <div class="action-info">
                   <div class="action-badge-row font-label-sm">
-                    <span class="action-pill pill-secondary">SECONDARY</span>
-                    <span class="action-priority">COOLING CIRCUIT</span>
+                    <span class="action-pill pill-secondary">SECUNDARIO</span>
+                    <span class="action-priority">CIRCUITO DE ENFRIAMIENTO</span>
                   </div>
                   <h3 class="font-body-md action-text">
-                    Inspect transmission cooler line flow rate and filter seal
+                    Inspeccionar caudal de refrigeración y sello de filtros
                   </h3>
-                  <span class="font-label-sm action-sub">Recommended part: OE Filter Kit #TR-80-FK2</span>
+                  <span class="font-label-sm action-sub">Repuesto sugerido: Kit de sellos y fluidos OEM</span>
                 </div>
                 <button type="button" class="cad-btn-secondary" (click)="handlePrescriptiveAction('order')">
                   <span class="material-symbols-outlined">inventory_2</span>
-                  MARK ORDERED
+                  GENERAR ORDEN DE TALLER
                 </button>
               </div>
 
@@ -899,17 +901,17 @@
               <div class="action-item-card preventive-action">
                 <div class="action-info">
                   <div class="action-badge-row font-label-sm">
-                    <span class="action-pill pill-preventive">PREVENTIVE</span>
-                    <span class="action-priority">OBD-II CAN CALIBRATION</span>
+                    <span class="action-pill pill-preventive">PREVENTIVO</span>
+                    <span class="action-priority">CALIBRACIÓN OBD-II</span>
                   </div>
                   <h3 class="font-body-md action-text">
-                    Re-calibrate TCU shift-map adaptation parameters via OBD-II
+                    Restablecer ciclo de aprendizaje de parámetros en centralita
                   </h3>
-                  <span class="font-label-sm action-sub">Clears accumulated slip adaptation trim tables</span>
+                  <span class="font-label-sm action-sub">Limpia adaptaciones de tolerancia acumuladas</span>
                 </div>
                 <button type="button" class="cad-btn-secondary" (click)="handlePrescriptiveAction('selfTest')">
                   <span class="material-symbols-outlined">play_circle</span>
-                  RUN SELF-TEST
+                  INICIAR AUTO-TEST OBD-II
                 </button>
               </div>
 
@@ -918,10 +920,10 @@
 
           <!-- Telemetry Sync Confirmation Bar -->
           <div class="sync-confirm-bar font-label-sm">
-            <span>PRESCRIPTION ENGINE HASH: #7F09B1A</span>
+            <span>Diagnóstico predictivo verificado por telemetría</span>
             <div class="sync-status-cyan">
               <span class="material-symbols-outlined">cloud_done</span>
-              <span>SYNCED TO VELOCE PIT-LANE CLOUD</span>
+              <span>Sincronizado con base de datos</span>
             </div>
           </div>
 
@@ -930,12 +932,12 @@
       </section>
 
       <!-- ==================== 7. HISTORICAL BITÁCORA TABLE ==================== -->
-      <section class="cad-panel history-section">
+      <section class="cad-panel history-section" id="historial-de-fallas-obd-ii">
         <div class="history-header-bar">
           <div class="history-title-group">
             <span class="material-symbols-outlined icon-cyan">history</span>
             <div>
-              <h3 class="font-headline-sm history-title">HISTORIAL DE BITÁCORA VEHICULAR (POSTGRESQL / CAN-BUS)</h3>
+              <h3 class="font-headline-sm history-title">HISTORIAL DE DIAGNÓSTICOS VEHICULARES</h3>
               <div class="history-sub-meta font-label-sm">
                 @if (authService.isMechanic()) {
                   <span class="text-cyan">MODO TALLER: ACCESO GLOBAL AUTORIZADO (TODAS LAS PLACAS)</span>
@@ -985,12 +987,12 @@
             <table class="cad-history-table">
               <thead>
                 <tr class="font-label-sm">
-                  <th>TIMESTAMP (UTC)</th>
-                  <th>CHASSIS / PLACA</th>
-                  <th>SUBSYSTEM</th>
-                  <th>FALLA CLASIFICADA</th>
-                  <th>CERTEZA AI</th>
-                  <th>ODÓMETRO</th>
+                  <th>FECHA Y HORA</th>
+                  <th>PLACA</th>
+                  <th>SISTEMA AFECTADO</th>
+                  <th>DIAGNÓSTICO PREDICTIVO</th>
+                  <th>CONFIANZA IA</th>
+                  <th>KILOMETRAJE</th>
                   <th>REPORTADO POR</th>
                 </tr>
               </thead>
@@ -1028,7 +1030,7 @@
             <div class="ws-title-cluster">
               <span class="material-symbols-outlined icon-amber">construction</span>
               <div>
-                <h3 class="font-headline-sm ws-title">EMISIÓN DE ÓRDENES DE TALLER MECÁNICO (RBAC: ROLE_MECHANIC)</h3>
+                <h3 class="font-headline-sm ws-title">EMISIÓN DE ÓRDENES DE TALLER MECÁNICO</h3>
                 <span class="font-label-sm ws-sub">Gestión prescriptiva de órdenes de servicio y despacho de repuestos para cualquier placa.</span>
               </div>
             </div>
@@ -1044,7 +1046,7 @@
                 <tr class="font-label-sm">
                   <th>ORDEN ID</th>
                   <th>PLACA VEHÍCULO</th>
-                  <th>FALLA REPORTADA</th>
+                  <th>TRABAJO REQUERIDO</th>
                   <th>FECHA EMISIÓN</th>
                   <th>ESTADO TALLER</th>
                 </tr>
@@ -1074,16 +1076,16 @@
   <footer class="cad-footer">
     <div class="cad-footer-inner font-label-sm">
       <div class="footer-left">
-        <span>[+] TELEMETRY STREAM: <strong class="text-cyan">ACTIVE (TX/RX)</strong></span>
+        <span>[+] SISTEMA: <strong class="text-cyan">ACTIVO Y CONECTADO</strong></span>
         <span class="pipe">|</span>
-        <span>LATENCY: <strong class="text-cyan">12ms</strong></span>
+        <span>LATENCIA: <strong class="text-cyan">12ms</strong></span>
         <span class="pipe">|</span>
-        <span>FRAME LOSS: <strong class="text-on-surface">0.00%</strong></span>
+        <span>PÉRDIDA DE PAQUETES: <strong class="text-on-surface">0.00%</strong></span>
       </div>
       <div class="footer-right">
-        <span>CHASSIS-VIN: #VX982-GT-{{ licensePlate() }}</span>
+        <span>Vehículo evaluado: Placa {{ licensePlate() }}</span>
         <span class="pipe">|</span>
-        <span>ORTHO-CAD GRID: ACTIVE [32px]</span>
+        <span>Veloce Predictive OS v4.8</span>
         <span class="reticle-symbol font-headline-sm">⊕</span>
       </div>
     </div>
@@ -1096,9 +1098,9 @@
         
         <div class="modal-top-bar">
           <div class="modal-breadcrumbs font-label-sm">
-            <span class="text-cyan">SYS://SECURITY</span>
+            <span class="text-cyan">SEGURIDAD</span>
             <span class="crumb-separator">/</span>
-            <span>CLEARANCE-VERIFICATION</span>
+            <span>CONTROL DE ACCESO</span>
           </div>
           <button type="button" class="modal-close-btn" (click)="closeAuthModal()" title="Cerrar ventana">
             ✕
