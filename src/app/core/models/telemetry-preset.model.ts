@@ -6,3 +6,4 @@ export interface TelemetryPreset {
   mileage: number;
   fuelDelta: number;
 }
+

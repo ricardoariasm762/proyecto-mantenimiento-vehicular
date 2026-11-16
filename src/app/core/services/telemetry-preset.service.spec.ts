@@ -20,3 +20,4 @@ describe('TelemetryPresetService', () => {
     expect(preset?.category).toBe('Transmisión');
   });
 });
+

@@ -57,7 +57,7 @@ export class AuthService {
         return JSON.parse(stored) as AuthUser;
       }
     } catch (e) {
-      console.warn('Error leyendo usuario desde localStorage:', e);
+      console.warn('Error reading user from localStorage:', e);
     }
     return null;
   }
@@ -98,7 +98,7 @@ export class AuthService {
     try {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
     } catch (e) {
-      console.warn('Error guardando usuario en localStorage:', e);
+      console.warn('Error saving user to localStorage:', e);
     }
   }
 
@@ -107,7 +107,7 @@ export class AuthService {
     try {
       localStorage.removeItem(this.STORAGE_KEY);
     } catch (e) {
-      console.warn('Error eliminando usuario de localStorage:', e);
+      console.warn('Error removing user from localStorage:', e);
     }
   }
 }

@@ -48,3 +48,4 @@ export class TelemetryPresetService {
     return this.presets.find(p => p.id === id);
   }
 }
+

@@ -9,7 +9,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   let authReq = req;
 
-  // Inyectar el token en peticiones dirigidas al backend (local, Render o rutas /api)
+  // Inject Bearer token for requests targeting the backend (local, Render or /api routes)
   if (token && (req.url.includes(authService.apiUrl) || req.url.includes('/api') || req.url.includes('localhost:8082'))) {
     authReq = req.clone({
       setHeaders: {
@@ -21,7 +21,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
-        console.warn('Sesión expirada o token inválido (401). Cerrando sesión...');
+        console.warn('Session expired or invalid token (401). Logging out...');
         authService.logout();
       }
       return throwError(() => error);

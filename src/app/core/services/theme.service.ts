@@ -9,19 +9,19 @@ export type ResolvedTheme = 'light' | 'dark';
 export class ThemeService {
   private readonly STORAGE_KEY = 'veloce-theme-preference';
 
-  // Preferencia del usuario: 'system', 'light' o 'dark'
+  // User preference: 'system', 'light' or 'dark'
   public readonly themePreference = signal<ThemePreference>('system');
 
-  // Tema resuelto actualmente activo ('light' o 'dark')
+  // Currently active resolved theme ('light' or 'dark')
   public readonly activeTheme = signal<ResolvedTheme>('dark');
 
-  // Consulta de medios del sistema
+  // System media query
   private mediaQuery: MediaQueryList | null = null;
 
   constructor() {
     this.initTheme();
 
-    // Reaccionar a cambios en la preferencia del usuario
+    // React to user preference changes
     effect(() => {
       const pref = this.themePreference();
       this.applyTheme(pref);
@@ -31,7 +31,7 @@ export class ThemeService {
   private initTheme(): void {
     if (typeof window === 'undefined') return;
 
-    // Detectar si el usuario ya tenía una preferencia guardada en localStorage
+    // Detect if user already saved a preference in localStorage
     const saved = localStorage.getItem(this.STORAGE_KEY) as ThemePreference | null;
     const initialPref: ThemePreference = saved && ['light', 'dark', 'system'].includes(saved)
       ? saved
@@ -39,7 +39,7 @@ export class ThemeService {
 
     this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    // Escuchar cambios automáticos del sistema operativo en tiempo real
+    // Listen for live operating system theme changes in real time
     this.mediaQuery.addEventListener('change', (e) => {
       if (this.themePreference() === 'system') {
         const resolved: ResolvedTheme = e.matches ? 'dark' : 'light';

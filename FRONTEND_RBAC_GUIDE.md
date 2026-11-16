@@ -31,3 +31,4 @@ El servicio `AuthService` utiliza `signal` para gestionar la reactividad del usu
 - **Modo Mecánico (`ROLE_MECHANIC`)**:
   - Consulta y auditoría global de cualquier placa automotriz.
   - Panel de emisión de órdenes de taller con priorización (Crítica, Alta, Media, Baja).
+

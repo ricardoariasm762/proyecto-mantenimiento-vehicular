@@ -34,3 +34,4 @@ export function validateFuelDelta(fuelDelta: number): ValidationResult {
   }
   return { isValid: true };
 }
+

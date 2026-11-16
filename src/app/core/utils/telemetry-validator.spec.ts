@@ -19,3 +19,4 @@ describe('TelemetryValidator', () => {
     expect(validateFuelDelta(105).isValid).toBeFalse();
   });
 });
+

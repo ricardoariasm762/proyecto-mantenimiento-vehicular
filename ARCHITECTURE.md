@@ -11,3 +11,4 @@ La interfaz está construida siguiendo la estética técnica de plano de ingenie
 - Señales en `AuthService` para estado de autenticación reactivo sin suscripciones manuales.
 - Componentes standalone en Angular 19 con control de flujo `@if` y `@for`.
 - Interceptor HTTP funcional para inyección de token Bearer en solicitudes salientes.
+

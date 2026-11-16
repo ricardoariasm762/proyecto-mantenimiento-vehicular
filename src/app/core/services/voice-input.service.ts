@@ -24,7 +24,7 @@ export class VoiceInputService {
       this.recognition = new SpeechRecognition();
       this.recognition.continuous = true;
       this.recognition.interimResults = true;
-      this.recognition.lang = 'es-CO'; // Español Colombia / Latinoamérica
+      this.recognition.lang = 'es-CO'; // Spanish Colombia / Latin America
 
       this.recognition.onstart = () => {
         this.isListening.set(true);
@@ -40,7 +40,7 @@ export class VoiceInputService {
       };
 
       this.recognition.onerror = (event: any) => {
-        console.warn('Error en SpeechRecognition:', event.error);
+        console.warn('SpeechRecognition error:', event.error);
         this.isListening.set(false);
         if (event.error === 'not-allowed') {
           this.errorMessage.set('Permiso de micrófono denegado en el navegador.');
@@ -56,7 +56,7 @@ export class VoiceInputService {
       };
     } else {
       this.isSupported.set(false);
-      console.warn('La API Web Speech no está disponible en este navegador.');
+      console.warn('Web Speech API is not available in this browser.');
     }
   }
 

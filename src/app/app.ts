@@ -33,29 +33,29 @@ export class App implements OnInit, OnDestroy {
   public readonly voiceService = inject(VoiceInputService);
   public readonly authService = inject(AuthService);
 
-  // Navegación
+  // Navigation
   public readonly activeNav = signal<string>('diagnostico-predictivo');
 
-  // Estado del Modal de Autenticación
+  // Authentication modal state
   public readonly showAuthModal = signal<boolean>(false);
   public readonly authModalTab = signal<'login' | 'register'>('login');
 
-  // Capas del CAD Blueprint
+  // CAD Blueprint layers
   public readonly activeLayer = signal<'wireframe' | 'thermal' | 'kinematics'>('wireframe');
   public readonly showGrid = signal<boolean>(true);
   public readonly activeHotspot = signal<'transmission' | 'engine' | 'brakes' | 'suspension' | 'electrical'>('transmission');
 
-  // Estado del reloj UTC en tiempo real
+  // Real-time UTC clock state
   public readonly currentTimeUtc = signal<string>('14:28:09.412 UTC');
   private clockIntervalId: any = null;
 
-  // Estado de las barras del espectro de audio (Osciloscopio reactivo)
+  // Audio spectrum bars state (reactive oscilloscope)
   public readonly spectrumBars = signal<number[]>([
     12, 18, 30, 24, 38, 42, 28, 16, 24, 36, 42, 32, 20, 28, 36, 24, 32, 16, 12, 20, 28, 16, 8
   ]);
   private spectrumIntervalId: any = null;
 
-  // Formulario y parámetros de telemetría reactivos
+  // Reactive telemetry parameters and form state
   public readonly licensePlate = signal<string>('TRX-720');
   public readonly mileageKm = signal<number>(64820);
   public readonly kmSinceLastService = signal<number>(8450);
@@ -64,12 +64,12 @@ export class App implements OnInit, OnDestroy {
     'Noticeable rattle and high vibration when accelerating over 60 km/h, accompanied by intermittent transmission slip between 3rd and 4th gear under load.'
   );
 
-  // Estado de taller y órdenes mecánicas
+  // Workshop status and mechanical repair orders
   public readonly workshopOrders = signal<Array<{ id: string; plate: string; fault: string; date: string; status: string }>>([
     { id: 'OT-9841', plate: 'TRX-720', fault: 'Falla en Transmisión (Deslizamiento Convertidor)', date: '2026-11-11 12:40', status: 'EMITIDA' }
   ]);
 
-  // Estado de envío y diagnóstico
+  // Diagnosis and submission state
   public readonly isSubmitting = signal<boolean>(false);
   public readonly currentResult = signal<VehicleDiagnosisResponse | null>({
     licensePlate: 'TRX-720',
@@ -85,7 +85,7 @@ export class App implements OnInit, OnDestroy {
   public readonly errorMessage = signal<string | null>(null);
   public readonly actionNotification = signal<string | null>(null);
 
-  // Cálculo del porcentaje del offset circular SVG (circunferencia = 2 * PI * r = 2 * 3.14159 * 54 ≈ 339.29)
+  // SVG circular gauge dash offset calculation (circumference = 2 * PI * r = 2 * 3.14159 * 54 ≈ 339.29)
   public readonly circleDashOffset = computed(() => {
     const res = this.currentResult();
     const pct = res ? Math.min(100, Math.max(0, res.confidencePercentage)) : 68;
@@ -93,7 +93,7 @@ export class App implements OnInit, OnDestroy {
     return circumference - (circumference * pct) / 100;
   });
 
-  // Porcentaje del intervalo de servicio
+  // Service interval percentage
   public readonly servicePercent = computed(() => {
     return Math.min(100, Math.round((this.kmSinceLastService() / 10000) * 100));
   });
@@ -132,7 +132,7 @@ export class App implements OnInit, OnDestroy {
   });
 
   constructor() {
-    // Sincronizar automáticamente la transcripción de voz con el síntoma en tiempo real
+    // Automatically synchronize voice transcript with raw symptom in real time
     effect(() => {
       const voiceText = this.voiceService.transcriptText();
       if (voiceText && voiceText.trim().length > 0) {
@@ -140,7 +140,7 @@ export class App implements OnInit, OnDestroy {
       }
     });
 
-    // Sincronizar placa cuando el usuario cambia o se autentica
+    // Synchronize plate when user changes or authenticates
     effect(() => {
       const user = this.authService.currentUser();
       if (user && user.defaultLicensePlate) {
@@ -153,7 +153,7 @@ export class App implements OnInit, OnDestroy {
     this.startClock();
     this.startOscilloscopeAnimation();
 
-    // Si ya hay usuario autenticado, inicializar su placa asignada
+    // If authenticated user is already present, initialize their assigned plate
     const user = this.authService.currentUser();
     if (user && user.defaultLicensePlate) {
       this.licensePlate.set(user.defaultLicensePlate);
@@ -364,8 +364,8 @@ export class App implements OnInit, OnDestroy {
           return;
         }
 
-        console.warn('Backend API no respondió o error en servidor:', err);
-        // Fallback local contingente si el backend no está iniciado
+        console.warn('Backend API did not respond or server error:', err);
+        // Contingent local fallback if backend is offline
         const localInference = this.generateLocalFallback(payload);
         this.currentResult.set(localInference);
 
@@ -438,7 +438,7 @@ export class App implements OnInit, OnDestroy {
   public loadHistory(licensePlate?: string): void {
     this.isLoadingHistory.set(true);
 
-    // Si es mecánico y no se especifica placa, consultar todo el historial global
+    // If mechanic and no plate specified, query entire global history
     const isMech = this.authService.isMechanic();
     const plate = licensePlate && licensePlate.trim().length > 0 ? licensePlate.trim() : (isMech ? '' : this.licensePlate());
 
@@ -460,7 +460,7 @@ export class App implements OnInit, OnDestroy {
           return;
         }
 
-        // Datos de respaldo local para visualización
+        // Local fallback data for visualization
         if (this.historyList().length === 0) {
           this.historyList.set([
             {

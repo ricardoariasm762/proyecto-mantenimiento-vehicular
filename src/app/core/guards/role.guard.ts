@@ -22,7 +22,7 @@ export const mechanicGuard: CanActivateFn = () => {
     return true;
   }
 
-  console.warn('Acceso denegado: Vista reservada exclusivamente para Mecánicos');
+  console.warn('Access denied: View reserved exclusively for Mechanics');
   router.navigate(['/dashboard']);
   return false;
 };
@@ -35,7 +35,7 @@ export const driverGuard: CanActivateFn = () => {
     return true;
   }
 
-  console.warn('Acceso denegado: Vista reservada exclusivamente para Conductores');
+  console.warn('Access denied: View reserved exclusively for Drivers');
   router.navigate(['/dashboard']);
   return false;
 };

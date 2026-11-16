@@ -42,3 +42,4 @@ export const environment = {
 };
 ```
 Angular reemplaza automáticamente `environment.ts` con `environment.prod.ts` durante `ng build` gracias a la sección `fileReplacements` de `angular.json`.
+

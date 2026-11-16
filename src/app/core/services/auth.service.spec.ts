@@ -41,3 +41,4 @@ describe('AuthService', () => {
     expect(localStorage.getItem('auth_user')).toBeNull();
   });
 });
+
